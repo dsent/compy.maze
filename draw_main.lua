@@ -369,6 +369,14 @@ end
 compy.input.shortcuts.keypressed["shift+escape"] =
     compy.input.fn.stop_here(on_escape)
 
+-- Bare Escape empties the command field, so the child starts
+-- the next step on a clean line: Escape, C, Enter. The widget
+-- does nothing on Escape unless the program asks
+-- (doc/input_api.md, "Setting the lifecycle flags"); maze
+-- does not ask, and its field keeps the draft.
+
+compy.input.configure{ clear_on_cancel = true }
+
 function drawGameKey(key)
   local fn = SYSTEM_KEYS[key]
   if fn then

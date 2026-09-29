@@ -40,7 +40,8 @@ this hint on or off.
 
 Type commands in the text field at the bottom and press Enter
 to run them. You hear a ping for each command except C. Clearing
-the canvas is silent.
+the canvas is silent. Press Escape to empty the text field for
+your next commands.
 
 You can give directions on a compass:
 
@@ -148,5 +149,5 @@ It works in both drawing games, and commands after it do not
 run.
 
 It works while editing, while a program is running, and after
-a completed picture. Bare Escape preserves your draft.
+a completed picture.
 Ctrl+Q always leaves through the host.
