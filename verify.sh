@@ -47,6 +47,9 @@ echo "== draw-mode spec (from repo) =="
 echo "== draw-menu echo-guard spec (from repo) =="
 ( cd "$SRC" && "$LUA" spec/draw_menu_guard_spec.lua ) || fail=1
 
+echo "== draw Escape spec (from repo) =="
+( cd "$SRC" && "$LUA" spec/draw_escape_spec.lua ) || fail=1
+
 echo "== self-contained (every require resolves in-folder) =="
 for d in maze draw; do
   reqs=$(grep -hoE 'require\("[^"]+"\)' "$TMP/$d"/*.lua \

@@ -12,7 +12,8 @@ recorded source identity and the previous project is backed up.
 5. Open Plan a path, enter a short plan, run it, and retry it.
 6. Open All mazes, run one editor command, and confirm the
    robot, trail, compass, command echo, sound, and timing.
-   Press Escape and confirm the field keeps the command.
+   Type a command without pressing Enter, press Escape, and
+   confirm the text stays.
 7. Leave through Ctrl+Q and confirm the console is usable.
 
 ## B. Draw Acceptance
@@ -22,7 +23,7 @@ recorded source identity and the previous project is backed up.
 2. Open Free draw. Run commands in separate submissions,
    confirm the trail and robot persist, then run C followed by
    a movement in the same program. Press Escape and confirm
-   the field empties.
+   the field empties and the trail and robot stay.
 3. Confirm Free draw has the original 8x8 canvas, right-side
    compass, cumulative trail, bottom-left start, and soft edge.
 4. Return to the menu from Free draw by typing `<`, with the
@@ -44,7 +45,10 @@ recorded source identity and the previous project is backed up.
 12. Read every target once at Picture 1-20 and confirm each is
     recognizable as its name at preview scale.
 13. Exercise a middle task and Picture 20/20 Dog, checking
-    smooth animation, quiet sounds, and editor use.
+    smooth animation, quiet sounds, and editor use. On the
+    middle task, run a program that does not complete it, press
+    Escape, and confirm the field empties and the trail and
+    robot stay.
 14. Complete Dog, press Tab, and confirm Draw returns to its
     menu.
 15. Return to the menu from a running picture program with `<`,

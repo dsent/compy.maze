@@ -11,12 +11,14 @@ From the repository root (also works from inside `spec/`):
     lua spec/script_spec.lua
     lua spec/draw_levels_spec.lua
     lua spec/draw_mode_spec.lua
+    lua spec/draw_escape_spec.lua
 
 Output ends with a summary line:
 
     29 passed, 0 failed, 0 pending
     8 passed, 0 failed, 0 pending
     2 passed, 0 failed, 0 pending
+    8 passed, 0 failed, 0 pending
 
 Exit code is `0` when nothing failed, non-zero otherwise,
 so the same command works in a CI check. A failure prints
@@ -50,6 +52,9 @@ the feature exists. When a feature lands, its
   trail-only routes, and target-edge matching.
 - `draw_mode_spec.lua` — Free draw's preserved command set and
   picture mode's scoped next/previous commands.
+- `draw_escape_spec.lua` — bare Escape empties draw's command
+  field and every modified Escape keeps it, against a stand-in
+  for the runtime's input routing.
 
 ## Scope
 
