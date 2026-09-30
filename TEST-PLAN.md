@@ -22,8 +22,10 @@ recorded source identity and the previous project is backed up.
    Draw the picture second.
 2. Open Free draw. Run commands in separate submissions,
    confirm the trail and robot persist, then run C followed by
-   a movement in the same program. Press Escape and confirm
-   the field empties and the trail and robot stay.
+   a movement in the same program. When the robot stops, press
+   Escape and confirm the field empties and the trail and robot
+   stay. Type `EE`, press Alt+Esc, then Alt+Shift+Esc, and
+   confirm the text stays.
 3. Confirm Free draw has the original 8x8 canvas, right-side
    compass, cumulative trail, bottom-left start, and soft edge.
 4. Return to the menu from Free draw by typing `<`, with the
@@ -46,9 +48,9 @@ recorded source identity and the previous project is backed up.
     recognizable as its name at preview scale.
 13. Exercise a middle task and Picture 20/20 Dog, checking
     smooth animation, quiet sounds, and editor use. On the
-    middle task, run a program that does not complete it, press
-    Escape, and confirm the field empties and the trail and
-    robot stay.
+    middle task, run a program that does not complete it. When
+    the robot stops, press Escape and confirm the field empties
+    and the trail and robot stay.
 14. Complete Dog, press Tab, and confirm Draw returns to its
     menu.
 15. Return to the menu from a running picture program with `<`,

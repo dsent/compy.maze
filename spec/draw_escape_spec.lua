@@ -123,6 +123,10 @@ T.it("bare Escape empties the field and stays in the game", function()
   T.eq(GS.screen, "game")
 end)
 
+-- This fails if the Shift+Esc shortcut goes: the press then
+-- falls through to the shown widget as an Escape and empties
+-- the field in the game.
+
 T.it("Shift+Esc goes to the menu and keeps the draft", function()
   in_game_with_draft()
   press({ "shift" }, "escape")

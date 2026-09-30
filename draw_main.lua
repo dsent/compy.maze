@@ -356,9 +356,9 @@ end
 -- offered the key before the widget is. The typed "<" exit
 -- stays.
 --
--- stop_here, or the same press also reaches the widget and
--- clears it: one keystroke leaving the game and wiping the
--- drawing's program behind it.
+-- stop_here because the press is this program's own. It
+-- would not clear the field if it went on: toDrawMenu hides
+-- the widget, and a hidden widget is not offered the key.
 
 function on_escape()
   if GS.screen == "game" then
