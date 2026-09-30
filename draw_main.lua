@@ -376,8 +376,8 @@ compy.input.shortcuts.keypressed["shift+escape"] =
 -- does not ask, and its field keeps the draft.
 --
 -- The widget clears on any Escape without Ctrl, so the Alt
--- chords are taken here and do nothing: only bare Escape
--- empties the field.
+-- chords are taken here and do nothing: an Escape with Ctrl,
+-- Alt or Shift held keeps the field.
 
 compy.input.configure{ clear_on_cancel = true }
 

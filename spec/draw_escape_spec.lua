@@ -1,11 +1,12 @@
 -- Escape in draw: bare Escape empties the command field, and
--- every modified Escape leaves it alone. The widget lives in
--- the Compy runtime, so draw_main.lua runs here against a
--- stand-in that follows the runtime's documented contract
--- (doc/input_api.md): a key press goes to its exact combo
--- shortcut, then the hook, then the shown widget, stopping at
--- the first that takes it; the widget empties its field on an
--- Escape without Ctrl once the program sets clear_on_cancel.
+-- Escape with Ctrl, Alt or Shift held leaves it alone. The
+-- widget lives in the Compy runtime, so draw_main.lua runs
+-- here against a stand-in that follows the runtime's
+-- documented contract (doc/input_api.md): a key press goes to
+-- its exact combo shortcut, then the hook, then the shown
+-- widget, stopping at the first that takes it; the widget
+-- empties its field on an Escape without Ctrl once the program
+-- sets clear_on_cancel.
 
 local here = arg[0]:match("^(.*)/[^/]*$") or "."
 dofile(here .. "/support.lua")

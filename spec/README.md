@@ -57,8 +57,8 @@ the feature exists. When a feature lands, its
 - `draw_menu_guard_spec.lua` — the menu key's one-time echo
   guards: armed per menu key, all cleared by the first fire.
 - `draw_escape_spec.lua` — bare Escape empties draw's command
-  field and every modified Escape keeps it, against a stand-in
-  for the runtime's input routing.
+  field and Escape with Ctrl, Alt or Shift held keeps it,
+  against a stand-in for the runtime's input routing.
 
 ## Scope
 
