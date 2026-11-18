@@ -7,7 +7,8 @@ recorded source identity and the previous project is backed up.
 
 1. Launch Maze and confirm the three-item maze menu appears.
 2. Open Drive the robot and complete one direct-control level.
-3. Toggle the grid with the Menu key in both directions.
+3. Toggle the grid with the Menu key in both directions. Click
+   on the maze and confirm the grid stays as it is.
 4. Return to the menu with Esc. Open Drive the robot again and
    hold Esc for two seconds: the maze menu shows and stays.
 5. Open Plan a path, enter a short plan, run it, and retry it.
@@ -54,6 +55,7 @@ recorded source identity and the previous project is backed up.
    target appears on an 8x8 grid above the compass with a green
    start marker at the same coordinates as the playing field.
 6. Toggle the faint field hint off and on with the Menu key.
+   Click on the canvas and confirm the hint stays as it is.
 7. Complete Line with `5E`; confirm the completion stripe shows
    the Tab key glyph.
 8. Press Tab. Confirm Picture 2/20 starts with its declared hint

@@ -315,29 +315,16 @@ end
 
 SYSTEM_KEYS = { }
 
+-- The Menu key toggles the picture hint. A click is no
+-- command: the program takes no mouse hook, so a click
+-- reaches the command field, where it places the cursor.
+
 function SYSTEM_KEYS.menu()
   if GS.draw_mode ~= "picture" then
     return
   end
   GS.hint = not GS.hint
   sfx.sword()
-end
-
--- A hook rather than love.mousepressed: Free draw keeps its
--- command widget shown for the whole mode, and a handler
--- captured from love.* consumes the channel outright
--- (doc/input_api.md, "Event hooks and shortcuts -- when to use
--- which"). Claimed only where it acts -- the hint toggle is a
--- picture-mode gesture, and elsewhere the click is not ours.
--- The mode test mirrors menu()'s own, which stays because the
--- key path calls it too; here it is what lets the return be
--- honest.
-compy.input.hooks.mousepressed = function()
-  if GS.draw_mode ~= "picture" then
-    return
-  end
-  SYSTEM_KEYS.menu()
-  return true
 end
 
 -- Esc empties the command field when it holds text, so the

@@ -28,6 +28,13 @@ T.it("the field is given no cancel flag", function()
   T.eq(widget.flags.hide_on_cancel, nil)
 end)
 
+-- A click is no command: no mouse hook takes it, so the
+-- runtime hands it to the field.
+
+T.it("no mouse hook takes a click from the field", function()
+  T.eq(compy.input.hooks.mousepressed, nil)
+end)
+
 T.it("Esc empties the field and stays in the game", function()
   in_game("EE")
   press({ }, "escape")

@@ -165,20 +165,13 @@ end
 
 SYSTEM_KEYS = { }
 
+-- The Menu key toggles the grid. A click is no command: the
+-- program takes no mouse hook, so a click reaches the command
+-- field, where it places the cursor.
+
 function SYSTEM_KEYS.menu()
   cur_grid = not cur_grid
   sfx.sword()
-end
-
--- A hook rather than love.mousepressed: this program shows the
--- command widget on editor levels, and a handler captured from
--- love.* consumes its channel outright, leaving nothing for
--- anything below it (doc/input_api.md, "Event hooks and
--- shortcuts -- when to use which"). Every click toggles the
--- grid here, so every click is claimed.
-compy.input.hooks.mousepressed = function()
-  SYSTEM_KEYS.menu()
-  return true
 end
 
 -- Esc empties the command field when it holds text, and a
