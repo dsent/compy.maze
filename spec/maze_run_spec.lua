@@ -42,6 +42,16 @@ end
 
 print("== Maze shortcut carry ==")
 
+-- A level is judged once per run from the field: entering it
+-- judges nothing before the first Enter.
+
+T.it("Maze 4 is not judged on entry, before any Enter", function()
+  on_field_level()
+  tick(5)
+  T.eq(GS.failed, nil)
+  T.eq(level_index, 4)
+end)
+
 T.it("a shortcut from an earlier run is unknown", function()
   on_field_level()
   run("x=e")
@@ -67,10 +77,12 @@ T.it("a jump carries the jumping program's shortcuts", function()
   T.eq(GS.invalid, nil)
 end)
 
-T.it("a win carries the winning program's shortcuts", function()
+T.it("a win carries the winning program's shortcuts, and Maze 5 "
+  .. "is not judged on arrival", function()
   on_field_level()
   run("x=2n;x2wx")
   T.eq(level_index, 5)
+  T.eq(GS.failed, nil)
   run("x")
   T.eq(GS.invalid, nil)
 end)

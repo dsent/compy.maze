@@ -24,7 +24,7 @@ Output ends with a summary line:
     3 passed, 0 failed, 0 pending
     4 passed, 0 failed, 0 pending
     11 passed, 0 failed, 0 pending
-    4 passed, 0 failed, 0 pending
+    5 passed, 0 failed, 0 pending
     29 passed, 0 failed, 0 pending
     35 passed, 0 failed, 0 pending
 
@@ -74,19 +74,23 @@ the feature exists. When a feature lands, its
 - `maze_run_spec.lua` — maze's shortcut rule, which draw
   follows: an earlier run's shortcut is unknown, and a jump
   or a win carries the program's shortcuts to the next level.
-  Enter in place of Tab after a miss runs and is judged.
+  Enter in place of Tab after a miss runs and is judged; a
+  level is judged once per run, never on entry, Maze 5
+  included right after Maze 4's automatic advance.
 - Both run specs drive the program as a child does: a
   program goes in through the field's Enter (`submit`), the
   run goes on in `love.update` (`tick`), and Tab moves on.
 - `draw_escape_spec.lua`, `maze_escape_spec.lua` — Esc in each
-  program: a bare Esc empties a field that holds text (and
-  maze's plan when it holds keys) and steps back to the menu
-  from an empty one or a level with neither; at the menu it
-  leaves the program; Esc with Ctrl, Alt or Shift held does
-  none of this and leaves the field shown; a held Esc acts
-  once, so one that reached the menu stays there; the field
-  is given no cancel flag of its own, and no mouse hook takes
-  a click from it.
+  program, as the keys are delivered to it: a bare Esc
+  empties a field that holds text (and maze's plan when it
+  holds keys) and steps back to the menu from an empty one
+  or a level with neither; at the menu it leaves the
+  program; Esc with Ctrl, Alt or Shift held, when it reaches
+  the program, does none of this and leaves the field shown
+  (Ctrl+Esc never reaches it: the IDE keeps that chord and
+  quits on it); a held Esc acts once, so one that reached the
+  menu stays there; the field is given no cancel flag of its
+  own, and no mouse hook takes a click from it.
 - `input_standin.lua` — the stand-in for the runtime's input
   routing the Escape and run specs run the programs against,
   with the field's cancel as the IDE has it: a bare Esc,

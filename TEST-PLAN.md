@@ -40,15 +40,19 @@ recorded source identity and the previous project is backed up.
 1. Launch Draw and confirm the menu lists Free draw first and
    Draw the picture second.
 2. Open Free draw. Run `3e` and confirm three steps east and
-   that the field keeps `3e`; change it to `2n` and run it, and
-   confirm only two steps north from the start cell show. Run
-   `x=3e`, then `x`, and confirm "Unknown command: X"; run
-   `x=2e;x n x` and confirm it draws. Run C followed by a
-   movement in the same program. When the robot stops, press
-   Esc and confirm the field empties and the trail and robot
-   stay. Type `EE`, press Shift+Esc, Alt+Esc, then
-   Alt+Shift+Esc, and confirm the text stays. Hold Esc for two
-   seconds and confirm the field empties and Free draw stays.
+   that the field is empty while the robot moves and holds `3e`
+   again when it stops. Replace the field's text with `2n` and
+   run it, and confirm only two steps north from the start cell
+   show. Replace the text with `x=3e` and run it, then replace
+   it with `x` and run it, and confirm "Unknown command: X";
+   replace it with `x=2e;x n x`, run it and confirm it draws.
+   Replace it with `3e;c;2n`, run it and confirm only two steps
+   north from the start cell show. Replace it with `3e`; when
+   the robot stops, press Esc and confirm the field empties and
+   the trail and robot stay. Type `EE`, press Shift+Esc,
+   Alt+Esc, then Alt+Shift+Esc, and confirm the text stays.
+   Hold Esc for two seconds and confirm the field empties and
+   Free draw stays.
 3. Confirm Free draw has the original 8x8 canvas, right-side
    compass, bottom-left start, and soft edge.
 4. Type `<` in Free draw, press Enter, and confirm it is
@@ -60,8 +64,13 @@ recorded source identity and the previous project is backed up.
 6. Toggle the faint field hint off and on with the Menu key.
    Click on the canvas and confirm the hint stays as it is.
 7. Complete Line with `5E`; confirm the completion stripe shows
-   the Tab key glyph.
-8. Press Tab. Confirm Picture 2/20 starts with its declared hint
+   the Tab key glyph. Press Enter in place of Tab: the program
+   runs again from a clean start and the stripe comes back.
+   Replace the text with `X=5E;X` and run it, then with `Q`
+   (refused), then press Tab, and confirm `X` runs on Picture
+   2/20; go back with `,`.
+8. Complete Line again with `5E`, then press Tab. Confirm
+   Picture 2/20 starts with its declared hint
    default, an empty field and a fresh trail at its own start
    point. Run a wrong program, then a corrected one, and confirm
    the corrected run starts clean.
@@ -70,7 +79,9 @@ recorded source identity and the previous project is backed up.
 10. Confirm Pictures 1-7 complete without retracing. Complete
    T with `4W2E5S` and confirm retracing is accepted.
 11. On a hint-off task, toggle the hint on, draw an extra edge,
-    and confirm it does not complete; run C and confirm reset.
+    and confirm it does not complete; run the extra edge, `C`
+    and the target's route as one program, and confirm it
+    completes.
 12. Read every target once at Picture 1-20 and confirm each is
     recognizable as its name at preview scale.
 13. Exercise a middle task and Picture 20/20 Dog, checking

@@ -138,9 +138,11 @@ In Draw the picture, use the same level commands as Maze:
 
 Put a number in front to jump several: 3. moves three pictures
 forward and 2, moves two back, stopping at the first or last
-picture. A jump opens a fresh copy of its destination picture
-with an empty text field; commands after the jump do not run,
-and the program's shortcuts come along.
+picture. A jump to another picture opens a fresh copy of it
+with an empty text field. The moves after the jump do not run,
+and the shortcuts your program defines, before or after the
+jump, come along. A jump that stays on the same picture, such
+as , on the first one, starts it over and keeps none of them.
 
 ## The Screen
 
