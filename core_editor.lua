@@ -104,19 +104,31 @@ end
 -- Any submit clears the previous run's crash marker; it
 -- otherwise persists through Tab so it stays visible while
 -- the child edits.
+--
+-- A program is validated against the level's base, and a
+-- rejected one leaves the shortcuts of the run before it,
+-- which a win or a jump still carries on.
+--
+-- A run from the field is judged when it ends, whatever the
+-- run before it left: a win, a miss or a crash drops
+-- ctrl_update to hold the screen, and Enter in place of Tab
+-- arms it again.
 
 function start_program(text)
   GS.failed = nil
   GS.crash = nil
   local lines = string.lines(text)
+  local earlier = macros
   macros = clone_macros(GS.base_macros)
   local bad = validate_program(lines)
   if bad then
+    macros = earlier
     reject_program(text, bad, lines)
     return
   end
   GS.invalid = nil
   GS.program = text
+  ctrl_update = rearm_input
   before_run()
   echo_lines = lines
   process_input(lines, 0)

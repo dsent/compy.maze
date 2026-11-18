@@ -62,10 +62,10 @@ and no device:
    `4 passed, 0 failed, 0 pending`);
 6. the Draw run spec passes
    (`lua spec/draw_run_spec.lua`, expect
-   `8 passed, 0 failed, 0 pending`);
+   `11 passed, 0 failed, 0 pending`);
 7. the Maze shortcut-carry spec passes
    (`lua spec/maze_run_spec.lua`, expect
-   `3 passed, 0 failed, 0 pending`);
+   `4 passed, 0 failed, 0 pending`);
 8. the Draw Escape spec passes
    (`lua spec/draw_escape_spec.lua`, expect
    `29 passed, 0 failed, 0 pending`);

@@ -4,8 +4,9 @@
 -- picture's base, the program that completes a picture carries
 -- its shortcuts to the next one, and Free draw has none to
 -- carry. draw_main.lua runs here against the stand-in in
--- input_standin.lua; whole runs step through the real
--- animation code.
+-- input_standin.lua, driven as a child drives it: a program
+-- goes in through the field's Enter, the run goes on in
+-- love.update, and Tab moves on.
 
 local here = arg[0]:match("^(.*)/[^/]*$") or "."
 dofile(here .. "/support.lua")
@@ -22,20 +23,12 @@ end
 draw_layout = function()
   return { }
 end
-prepareDrawLevels()
 
--- Submit `text` and step the run to its end, as love.update
--- does, then let the editor re-arm as it does after a run.
+-- Enter `text` in the field and let the run play out.
 
 local function run(text)
-  start_program(text)
-  for _ = 1, 1000 do
-    if editor_idle() then
-      break
-    end
-    stepDrawProgram(1)
-  end
-  rearm_input()
+  submit(text)
+  tick(100)
 end
 
 local function trace_count()
@@ -54,6 +47,14 @@ T.it("a run clears the drawing and starts the robot over",
     run("3e")
     T.eq({ player.col, player.row }, { 4, 8 })
     run("2n")
+    T.eq({ player.col, player.row, player.dir }, { 1, 6, "N" })
+    T.eq(trace_count(), 2)
+  end)
+
+T.it("C clears the drawing in the middle of a program",
+  function()
+    startDrawMode("free")
+    run("3e;c;2n")
     T.eq({ player.col, player.row, player.dir }, { 1, 6, "N" })
     T.eq(trace_count(), 2)
   end)
@@ -93,10 +94,38 @@ T.it("the program that completes a picture carries its "
     startDrawMode("picture")
     run("x=5e;x")
     T.eq(GS.won, true)
-    nextPictureLevel()
+    press({ }, "tab")
     T.eq(GS.level_index, 2)
     run("x")
     T.eq(GS.invalid, nil)
+  end)
+
+T.it("a rejected program keeps the winning program's shortcuts",
+  function()
+    startDrawMode("picture")
+    run("x=5e;x")
+    T.eq(GS.won, true)
+    run("q")
+    T.eq(GS.invalid.msg, "Unknown command: Q")
+    press({ }, "tab")
+    T.eq(GS.level_index, 2)
+    run("x")
+    T.eq(GS.invalid, nil)
+  end)
+
+T.it("Enter after a win runs again and can win again; Tab "
+  .. "moves on", function()
+    startDrawMode("picture")
+    run("5e")
+    T.eq(GS.won, true)
+    run("5e")
+    T.eq(GS.won, true)
+    run("3e")
+    T.eq(GS.won, false)
+    run("5e")
+    T.eq(GS.won, true)
+    press({ }, "tab")
+    T.eq(GS.level_index, 2)
   end)
 
 T.it("a jump carries the jumping program's shortcuts, as in maze",

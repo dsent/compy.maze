@@ -183,6 +183,32 @@ function press(mods, key, isrepeat)
   held = { }
 end
 
+-- Enter on the shown field, as the IDE takes it: a non-empty
+-- submission empties a project's field first
+-- (clear_on_submit), then hands on_text_entered the text.
+
+function submit(text)
+  if text then
+    widget.text = text
+  end
+  local t = widget.text
+  local cb = widget.flags.on_text_entered
+  if not widget.shown or t == "" or not cb then
+    return
+  end
+  widget.text = ""
+  cb(t)
+end
+
+-- Frames of love.update, a whole second each, so every
+-- animation ends within the frame it is advanced in.
+
+function tick(n)
+  for _ = 1, n or 1 do
+    love.update(1)
+  end
+end
+
 -- Every chord of Escape with Ctrl, Alt or Shift held.
 
 ESC_CHORDS = {
