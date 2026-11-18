@@ -1,155 +1,84 @@
--- Escape in draw: bare Escape empties the command field, and
--- Escape with Ctrl, Alt or Shift held leaves it alone. The
+-- Esc in draw: a bare Esc empties a command field that holds
+-- text, and from an empty field steps back to the draw menu;
+-- at the menu it does nothing. Esc with Ctrl, Alt or Shift
+-- held does none of this, and a held Esc acts once. The
 -- widget lives in the Compy runtime, so draw_main.lua runs
--- here against a stand-in that follows the runtime's
--- documented contract (doc/input_api.md): a key press goes to
--- its exact combo shortcut, then the hook, then the shown
--- widget, stopping at the first that takes it; the widget
--- empties its field on an Escape without Ctrl once the program
--- sets clear_on_cancel.
+-- here against the stand-in in input_standin.lua.
 
 local here = arg[0]:match("^(.*)/[^/]*$") or "."
 dofile(here .. "/support.lua")
-
--- The stand-in widget and the input surface draw_main.lua
--- writes to at load.
-
-local widget = { shown = false, text = "", flags = { } }
-
-local function stop_here(f)
-  return function(...)
-    if f then
-      f(...)
-    end
-    return true
-  end
-end
-
-local function side_run(f)
-  return function(...)
-    if f then
-      f(...)
-    end
-    return false
-  end
-end
-
-compy = {
-  audio = setmetatable({ }, {
-    __index = function()
-      return function() end
-    end
-  }),
-  input = {
-    shortcuts = { keypressed = { }, textinput = { } },
-    hooks = { },
-    fn = {
-      stop_here = stop_here,
-      side_run = side_run,
-      ignore_repeat = function(f)
-        return f
-      end
-    },
-    configure = function(flags)
-      for k, v in pairs(flags) do
-        widget.flags[k] = v
-      end
-    end,
-    hide = function()
-      widget.shown = false
-    end
-  }
-}
-
-love = { }
-gfx = setmetatable({ }, {
-  __index = function()
-    return function() end
-  end
-})
-
--- Rendering and sprites are not needed to route a key.
-local skipped = {
-  core_sprites = true,
-  core_render = true,
-  draw_render = true,
-  keyboard_graphics = true
-}
-local loaded = { }
-
-function require(name)
-  if loaded[name] or skipped[name] then
-    return
-  end
-  loaded[name] = true
-  dofile(here .. "/../" .. name .. ".lua")
-end
-
+assert(loadfile(here .. "/input_standin.lua"))(here)
 dofile(here .. "/../draw_main.lua")
 
--- Modifiers in the runtime's combo order: ctrl, alt, shift.
-
-local function press(mods, key)
-  local combo = table.concat(mods, "+")
-  if combo ~= "" then
-    combo = combo .. "+"
-  end
-  local ctrl = combo:find("ctrl+", 1, true) ~= nil
-  local sc = compy.input.shortcuts.keypressed[combo .. key]
-  if sc and sc(key) then
-    return
-  end
-  local hook = compy.input.hooks.keypressed
-  if hook and hook(key) then
-    return
-  end
-  if widget.shown and key == "escape" and not ctrl
-      and widget.flags.clear_on_cancel then
-    widget.text = ""
-  end
-end
-
-local function in_game_with_draft()
+local function in_game(text)
   GS.screen = "game"
   widget.shown = true
-  widget.text = "EE"
+  widget.text = text
 end
 
 print("== Draw Escape ==")
 
-T.it("bare Escape empties the field and stays in the game", function()
-  in_game_with_draft()
+-- Esc is the program's alone: the field's own cancel stays
+-- inert, so neither flag is set, at load or when the field
+-- opens.
+
+T.it("the field is given no cancel flag", function()
+  open_editor("")
+  T.eq(widget.flags.clear_on_cancel, nil)
+  T.eq(widget.flags.hide_on_cancel, nil)
+end)
+
+T.it("Esc empties the field and stays in the game", function()
+  in_game("EE")
   press({ }, "escape")
   T.eq(widget.text, "")
   T.eq(GS.screen, "game")
 end)
 
--- This fails if the Shift+Esc shortcut goes: the press then
--- falls through to the shown widget as an Escape and empties
--- the field in the game.
+T.it("Esc on an empty field goes to the menu", function()
+  in_game("")
+  press({ }, "escape")
+  T.eq(GS.screen, "menu")
+  T.eq(widget.shown, false)
+end)
 
-T.it("Shift+Esc goes to the menu and keeps the draft", function()
-  in_game_with_draft()
-  press({ "shift" }, "escape")
-  T.eq(widget.text, "EE")
+T.it("Esc at the menu does nothing", function()
+  GS.screen = "menu"
+  widget.shown = false
+  press({ }, "escape")
   T.eq(GS.screen, "menu")
 end)
 
-local keeps = {
-  { "alt" },
-  { "alt", "shift" },
-  { "ctrl" },
-  { "ctrl", "shift" },
-  { "ctrl", "alt" },
-  { "ctrl", "alt", "shift" }
-}
+T.it("a held Esc empties the field and stays in the game",
+  function()
+    in_game("EE")
+    press({ }, "escape")
+    press({ }, "escape", true)
+    press({ }, "escape", true)
+    T.eq(widget.text, "")
+    T.eq(GS.screen, "game")
+  end)
 
-for _, mods in ipairs(keeps) do
+T.it("a held Esc left from a chord does not leave", function()
+  in_game("")
+  press({ "alt" }, "escape")
+  press({ }, "escape", true)
+  T.eq(GS.screen, "game")
+end)
+
+for _, mods in ipairs(ESC_CHORDS) do
   local name = table.concat(mods, "+") .. "+escape"
-  T.it(name .. " keeps the draft", function()
-    in_game_with_draft()
+  T.it(name .. " keeps the draft and the game", function()
+    in_game("EE")
     press(mods, "escape")
     T.eq(widget.text, "EE", name)
+    T.eq(widget.shown, true, name)
+    T.eq(GS.screen, "game", name)
+  end)
+  T.it(name .. " on an empty field stays in the game", function()
+    in_game("")
+    press(mods, "escape")
+    T.eq(widget.shown, true, name)
     T.eq(GS.screen, "game", name)
   end)
 end

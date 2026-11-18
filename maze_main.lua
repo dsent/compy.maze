@@ -181,31 +181,32 @@ compy.input.hooks.mousepressed = function()
   return true
 end
 
--- Shift+Esc steps back one level within the game: a game
--- level returns to the track menu; the menu is the top
--- level, so it is a no-op there (UX standard -- leaving the
--- game to the console is Ctrl+Esc / the host).
+-- Esc empties the command field when it holds text, and a
+-- plan that holds keys; from an empty one, or a level with
+-- neither, it steps back to the track menu, as the editor first drops the edit and then
+-- leaves the file. The menu is the top level, where Esc does
+-- nothing (leaving the game for the console is Ctrl+Q).
 --
--- A combo rather than a test inside the key handler, which
--- is what makes it reach editor levels: a combo is offered
--- the key before the command widget is, so a shown widget
--- cannot hide the gesture. The typed "<" command stays too.
---
--- stop_here, or the same press also reaches the widget and
--- clears it -- one keystroke leaving the game AND wiping
--- the draft behind it.
---
--- No repeat filter, deliberately: a second firing finds
--- GS.mode already off "game" and does nothing.
+-- One shortcut decides both steps. A combo is offered the key
+-- before the command widget is, so a shown widget cannot hide
+-- the gesture. It takes only a bare Esc, and only its press:
+-- a chord with Esc is no command here, and a held Esc that
+-- emptied the field does not go on to leave. The typed "<"
+-- command stays too.
 
 function on_escape()
-  if GS.mode == "game" then
+  local typed = (compy.input.get_text() or "") ~= ""
+  if typed then
+    compy.input.clear()
+  elseif plan_holds_keys() then
+    plan_reset()
+  elseif GS.mode == "game" then
     to_menu()
   end
 end
 
-compy.input.shortcuts.keypressed["shift+escape"] =
-    compy.input.fn.stop_here(on_escape)
+compy.input.shortcuts.keypressed["escape"] =
+    compy.input.fn.stop_here(compy.input.fn.ignore_repeat(on_escape))
 
 -- The whole press is passed on, not just the key name: the
 -- plan buffer needs to know whether it is a fresh press or
@@ -224,14 +225,14 @@ function game_key(k, sk, isrepeat)
 end
 
 -- A hook rather than love.keypressed, because combos are
--- registered on this same channel above: Shift+Esc and the
--- Tab family are offered every press first and may take it,
+-- registered on this same channel above: Esc and the Tab
+-- family are offered every press first and may take it,
 -- so this does not see them all -- and a plain callback
 -- would read as though it did. The other channels stay
 -- callbacks; nothing is registered ahead of them.
 --
--- Bare Escape stops here and goes no further; the shifted
--- form was taken by a combo before this ran.
+-- A chord with Esc does nothing here, nor in the field; a
+-- bare Esc was taken by its shortcut before this ran.
 
 compy.input.hooks.keypressed = function(k, sk, isrepeat)
   if k == "escape" then

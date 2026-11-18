@@ -37,13 +37,10 @@ START = {
 PRIMITIVES.C = true
 SILENT_CMDS.C = true
 
--- TEMPORARY: Shift+Esc cannot reach a program while the
--- editor input field is active (compy-maze-shift-esc-exit /
--- compy-ide-input-esc-dataloss, gated on the editor API), so
--- "<" exits to the drawing-game menu in the meantime. Both
--- mini-games register it: Free draw keeps its field active
--- throughout, so it has no other way out. Remove "<" when
--- Shift+Esc works in the editor.
+-- TEMPORARY: "<" exits to the drawing-game menu, as Esc on
+-- an empty field does. It dates from when no Esc reached a
+-- program through its field (compy-maze-shift-esc-exit). Both
+-- mini-games register it.
 
 PRIMITIVES["<"] = true
 SILENT_CMDS["<"] = true

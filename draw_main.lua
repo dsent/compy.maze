@@ -116,8 +116,6 @@ function stepPictureLevel(cmd)
 end
 
 -- TEMPORARY: the typed exit registered in draw_constants.lua.
--- Removed together with "<" when Shift+Esc reaches a program
--- from an active editor field.
 
 function exitToDrawMenu()
   toDrawMenu()
@@ -349,42 +347,31 @@ compy.input.hooks.mousepressed = function()
   return true
 end
 
--- Shift+Esc steps back to this program's menu. A combo
--- rather than a test inside the key handler, which is what
--- makes it reach Free draw at all: that mode keeps its
--- command widget shown the whole time, and a combo is
--- offered the key before the widget is. The typed "<" exit
--- stays.
+-- Esc empties the command field when it holds text, so the
+-- next step starts on a clean line: Esc, C, Enter. From an
+-- empty field Esc steps back to this program's menu, as the
+-- editor first drops the edit and then leaves the file. The
+-- menu is the top level, where Esc does nothing.
 --
--- stop_here because the press is this program's own. It
--- would not clear the field if it went on: toDrawMenu hides
--- the widget, and a hidden widget is not offered the key.
+-- One shortcut decides both steps. A combo is offered the key
+-- before the widget is, which is what makes it reach Free
+-- draw at all: that mode keeps its field shown the whole
+-- time. It takes only a bare Esc, and only its press: a chord
+-- with Esc is no command here, and a held Esc that emptied
+-- the field does not go on to leave. The typed "<" exit
+-- stays.
 
 function on_escape()
-  if GS.screen == "game" then
+  local typed = (compy.input.get_text() or "") ~= ""
+  if typed then
+    compy.input.clear()
+  elseif GS.screen == "game" then
     toDrawMenu()
   end
 end
 
-compy.input.shortcuts.keypressed["shift+escape"] =
-    compy.input.fn.stop_here(on_escape)
-
--- Bare Escape empties the command field, so the next step
--- starts on a clean line: Escape, C, Enter. The widget does
--- nothing on Escape unless the program asks
--- (doc/input_api.md, "Setting the lifecycle flags"); maze
--- does not ask, and its field keeps the draft.
---
--- The widget clears on any Escape without Ctrl, so the Alt
--- chords are taken here and do nothing: an Escape with Ctrl,
--- Alt or Shift held keeps the field.
-
-compy.input.configure{ clear_on_cancel = true }
-
-compy.input.shortcuts.keypressed["alt+escape"] =
-    compy.input.fn.stop_here()
-compy.input.shortcuts.keypressed["alt+shift+escape"] =
-    compy.input.fn.stop_here()
+compy.input.shortcuts.keypressed["escape"] =
+    compy.input.fn.stop_here(compy.input.fn.ignore_repeat(on_escape))
 
 function drawGameKey(key)
   local fn = SYSTEM_KEYS[key]
@@ -396,9 +383,10 @@ function drawGameKey(key)
 end
 
 -- A hook rather than love.keypressed, because combos are
--- registered on this same channel above: Shift+Esc and the
--- Tab family are offered every press first and may take it,
--- so this does not see them all.
+-- registered on this same channel above: Esc and the Tab
+-- family are offered every press first and may take it, so
+-- this does not see them all. A chord with Esc does nothing
+-- here, nor in the field.
 
 compy.input.hooks.keypressed = function(key)
   if key == "escape" then

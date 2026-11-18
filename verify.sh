@@ -7,7 +7,7 @@
 # self-contained (every require resolves inside its own
 # folder, except runtime modules). No LOVE, no device.
 #
-# On-device behaviour (rendering, sound, timing, Ctrl+Esc)
+# On-device behaviour (rendering, sound, timing, Ctrl+Q)
 # cannot be checked here -- that is the manual pass in
 # TEST-PLAN.md.
 #
@@ -49,6 +49,9 @@ echo "== draw-menu echo-guard spec (from repo) =="
 
 echo "== draw Escape spec (from repo) =="
 ( cd "$SRC" && "$LUA" spec/draw_escape_spec.lua ) || fail=1
+
+echo "== maze Escape spec (from repo) =="
+( cd "$SRC" && "$LUA" spec/maze_escape_spec.lua ) || fail=1
 
 echo "== self-contained (every require resolves in-folder) =="
 for d in maze draw; do
