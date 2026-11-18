@@ -19,7 +19,8 @@ maze. Press a number to begin:
   3 — All mazes
 
 You can return to this menu while playing by
-pressing Shift+Esc.
+pressing Esc. If you are typing a command or a plan, the
+first Esc empties it and the next one returns.
 
 ## Controls
 
@@ -77,7 +78,8 @@ in recording mode.
 Some mazes wait for your whole plan. Press direction
 keys and each one appears as a key picture at the
 bottom of the screen — the robot does not move yet.
-Press Backspace to take back the last key. When your
+Press Backspace to take back the last key, or Esc to
+empty the whole plan. When your
 plan is ready, press Enter: the robot follows it step
 by step, and each key lights up green as the robot
 does it.
@@ -244,14 +246,17 @@ any commands after it are not run.
 
 ## Leaving
 
-  Shift+Esc — return to the maze menu
-  Ctrl+Esc  — exit to the console
+  Esc       — empty the command field or the plan; from
+              an empty one, or a level with neither,
+              return to the maze menu
+  Ctrl+Q    — leave Maze for the console
   <         — leave a running program back to the menu
 
 Type < and press Enter to leave a running program.
-Bare Escape preserves your draft in the editor, while
-Shift+Esc can take you back to the menu even while
-editing.
+Esc works while editing and while planning: the first
+press empties what you typed, and the next one returns
+to the menu. While the robot is running a plan, Esc
+returns to the menu at once.
 
 ## Grid
 

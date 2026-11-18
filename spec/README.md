@@ -13,6 +13,7 @@ From the repository root (also works from inside `spec/`):
     lua spec/draw_mode_spec.lua
     lua spec/draw_menu_guard_spec.lua
     lua spec/draw_escape_spec.lua
+    lua spec/maze_escape_spec.lua
 
 Output ends with a summary line:
 
@@ -20,7 +21,8 @@ Output ends with a summary line:
     10 passed, 0 failed, 0 pending
     3 passed, 0 failed, 0 pending
     4 passed, 0 failed, 0 pending
-    8 passed, 0 failed, 0 pending
+    20 passed, 0 failed, 0 pending
+    26 passed, 0 failed, 0 pending
 
 Exit code is `0` when nothing failed, non-zero otherwise,
 so the same command works in a CI check. A failure prints
@@ -56,9 +58,17 @@ the feature exists. When a feature lands, its
   picture mode's scoped next/previous commands.
 - `draw_menu_guard_spec.lua` — the menu key's one-time echo
   guards: armed per menu key, all cleared by the first fire.
-- `draw_escape_spec.lua` — bare Escape empties draw's command
-  field and Escape with Ctrl, Alt or Shift held keeps it,
-  against a stand-in for the runtime's input routing.
+- `draw_escape_spec.lua`, `maze_escape_spec.lua` — Esc in each
+  program: a bare Esc empties a field that holds text (and
+  maze's plan when it holds keys) and steps back to the menu
+  from an empty one or a level with neither; at the menu it
+  does nothing; Esc with Ctrl, Alt or Shift held does none of
+  this and leaves the field shown; a held Esc acts once; the
+  field is given no cancel flag of its own.
+- `input_standin.lua` — the stand-in for the runtime's input
+  routing the two Escape specs run the programs against,
+  with the field's cancel as the IDE has it: a bare Esc,
+  acting only under `clear_on_cancel` or `hide_on_cancel`.
 
 ## Scope
 

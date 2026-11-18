@@ -25,8 +25,7 @@ T.it("picture mode accepts silent next and previous commands", function()
   T.eq(SILENT_CMDS[","], true)
 end)
 
--- Both mini-games need the typed exit: Free draw keeps the
--- editor field active, which swallows Shift+Esc.
+-- Both mini-games keep the typed exit beside Esc.
 
 T.it("both mini-games accept the silent exit command", function()
   setPictureNavigationEnabled(false)

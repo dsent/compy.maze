@@ -8,13 +8,24 @@ recorded source identity and the previous project is backed up.
 1. Launch Maze and confirm the three-item maze menu appears.
 2. Open Drive the robot and complete one direct-control level.
 3. Toggle the grid with the Menu key in both directions.
-4. Return to the menu with Shift+Esc.
+4. Return to the menu with Esc.
 5. Open Plan a path, enter a short plan, run it, and retry it.
-6. Open All mazes, run one editor command, and confirm the
-   robot, trail, compass, command echo, sound, and timing.
-   Type a command without pressing Enter, press Escape, and
-   confirm the text stays.
-7. Leave through Ctrl+Q and confirm the console is usable.
+6. Return to the menu with Esc and open Plan a path again, so
+   the plan can be edited (a won level locks it). Enter keys
+   without pressing Enter, press Shift+Esc and confirm the
+   plan stays; press Esc and confirm the plan empties and the
+   level stays; enter keys and hold Esc for two seconds: the
+   plan empties and the level stays; press Esc on the empty
+   plan and confirm the maze menu.
+7. Open All mazes and press `.` three times to reach Maze 4,
+   the first level with the command field (the first three
+   are direct-control). Run one editor command, and confirm
+   the robot, trail, compass, command echo, sound, and timing.
+   Type a command without pressing Enter, press Shift+Esc,
+   Alt+Esc and Alt+Shift+Esc, and confirm the text and the
+   level stay. Press Esc and confirm the field empties and the
+   level stays; press Esc again and confirm the maze menu.
+8. Leave through Ctrl+Q and confirm the console is usable.
 
 ## B. Draw Acceptance
 
@@ -23,9 +34,10 @@ recorded source identity and the previous project is backed up.
 2. Open Free draw. Run commands in separate submissions,
    confirm the trail and robot persist, then run C followed by
    a movement in the same program. When the robot stops, press
-   Escape and confirm the field empties and the trail and robot
-   stay. Type `EE`, press Alt+Esc, then Alt+Shift+Esc, and
-   confirm the text stays.
+   Esc and confirm the field empties and the trail and robot
+   stay. Type `EE`, press Shift+Esc, Alt+Esc, then
+   Alt+Shift+Esc, and confirm the text stays. Hold Esc for two
+   seconds and confirm the field empties and Free draw stays.
 3. Confirm Free draw has the original 8x8 canvas, right-side
    compass, cumulative trail, bottom-left start, and soft edge.
 4. Return to the menu from Free draw by typing `<`, with the
@@ -49,10 +61,10 @@ recorded source identity and the previous project is backed up.
 13. Exercise a middle task and Picture 20/20 Dog, checking
     smooth animation, quiet sounds, and editor use. On the
     middle task, run a program that does not complete it. When
-    the robot stops, press Escape and confirm the field empties
+    the robot stops, press Esc and confirm the field empties
     and the trail and robot stay.
 14. Complete Dog, press Tab, and confirm Draw returns to its
     menu.
 15. Return to the menu from a running picture program with `<`,
-    and again with Shift+Esc.
+    and again with Esc on an empty field.
 16. Leave through Ctrl+Q and confirm the console is usable.

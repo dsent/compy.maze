@@ -110,6 +110,19 @@ PLAN_ACTS = {
   [","] = plan_jump
 }
 
+-- Whether Esc has a plan to empty: a plan level with keys in
+-- its buffer, while input is not locked (plan_locked). During
+-- a run or a win Esc leaves for the menu, as on a level with
+-- no plan.
+
+function plan_holds_keys()
+  local planning = ctrl_pressed == plan_key and not plan_locked()
+  if not planning then
+    return false
+  end
+  return 0 < #GS.plan.buf
+end
+
 -- A tile key is a movement primitive; the silent
 -- navigation commands never become tiles.
 
