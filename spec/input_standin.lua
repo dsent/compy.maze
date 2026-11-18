@@ -11,7 +11,7 @@
 -- empties the field only under clear_on_cancel and hides it
 -- only under hide_on_cancel. A hidden widget's get_text
 -- answers nil. Key answers for the modifiers of the press in
--- hand.
+-- hand. stop() counts its calls in `stops`.
 
 local here = ...
 
@@ -84,6 +84,14 @@ compy = {
     end
   }
 }
+
+-- stop() ends the program in the runtime; here it counts.
+
+stops = 0
+
+function stop()
+  stops = stops + 1
+end
 
 -- The modifiers of the press in hand, as Key reports them.
 

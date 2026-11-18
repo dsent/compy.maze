@@ -20,7 +20,8 @@ maze. Press a number to begin:
 
 You can return to this menu while playing by
 pressing Esc. If you are typing a command or a plan, the
-first Esc empties it and the next one returns.
+first Esc empties it and the next one returns. Esc at this
+menu leaves Maze.
 
 ## Controls
 
@@ -248,15 +249,18 @@ any commands after it are not run.
 
   Esc       — empty the command field or the plan; from
               an empty one, or a level with neither,
-              return to the maze menu
-  Ctrl+Q    — leave Maze for the console
+              return to the maze menu; at the menu,
+              leave Maze for the console
+  Ctrl+Q    — leave Maze for the console at once
   <         — leave a running program back to the menu
 
 Type < and press Enter to leave a running program.
 Esc works while editing and while planning: the first
 press empties what you typed, and the next one returns
 to the menu. While the robot is running a plan, Esc
-returns to the menu at once.
+returns to the menu at once. Each Esc goes back one step,
+so holding it down stops at the menu. Ctrl+Q leaves Maze
+from anywhere.
 
 ## Grid
 

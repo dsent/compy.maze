@@ -42,7 +42,7 @@ Type commands in the text field at the bottom and press Enter
 to run them. You hear a ping for each command except C. Clearing
 the canvas is silent. Press Esc to empty the text field for
 your next commands. Esc on an empty field returns to the
-drawing-game menu.
+drawing-game menu, and Esc at that menu leaves Draw.
 
 You can give directions on a compass:
 
@@ -143,8 +143,9 @@ scale and coordinates as the playing field.
 
   <         — return to the drawing-game menu
   Esc       — empty the text field; from an empty field,
-              return to the drawing-game menu
-  Ctrl+Q    — leave Draw and return to the console
+              return to the drawing-game menu; at the
+              menu, leave Draw for the console
+  Ctrl+Q    — leave Draw for the console at once
 
 Type < and press Enter to go back to the drawing-game menu.
 It works in both drawing games, and commands after it do not
@@ -152,5 +153,6 @@ run.
 
 Esc works while editing, while a program is running, and
 after a completed picture. When the field holds text, the
-first Esc empties it and the next one returns.
-Ctrl+Q always leaves through the host.
+first Esc empties it and the next one returns. Each Esc goes
+back one step, so holding it down stops at the menu. Ctrl+Q
+leaves Draw from anywhere.

@@ -351,15 +351,16 @@ end
 -- next step starts on a clean line: Esc, C, Enter. From an
 -- empty field Esc steps back to this program's menu, as the
 -- editor first drops the edit and then leaves the file. The
--- menu is the top level, where Esc does nothing.
+-- menu is the top level, where Esc leaves Draw for the
+-- console, as Ctrl+Q does from anywhere.
 --
--- One shortcut decides both steps. A combo is offered the key
+-- One shortcut decides every step. A combo is offered the key
 -- before the widget is, which is what makes it reach Free
 -- draw at all: that mode keeps its field shown the whole
 -- time. It takes only a bare Esc, and only its press: a chord
 -- with Esc is no command here, and a held Esc that emptied
--- the field does not go on to leave. The typed "<" exit
--- stays.
+-- the field or reached the menu goes no further. The typed
+-- "<" exit stays.
 
 function on_escape()
   local typed = (compy.input.get_text() or "") ~= ""
@@ -367,6 +368,8 @@ function on_escape()
     compy.input.clear()
   elseif GS.screen == "game" then
     toDrawMenu()
+  else
+    stop()
   end
 end
 

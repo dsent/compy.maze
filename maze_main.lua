@@ -183,16 +183,17 @@ end
 
 -- Esc empties the command field when it holds text, and a
 -- plan that holds keys; from an empty one, or a level with
--- neither, it steps back to the track menu, as the editor first drops the edit and then
--- leaves the file. The menu is the top level, where Esc does
--- nothing (leaving the game for the console is Ctrl+Q).
+-- neither, it steps back to the track menu, as the editor
+-- first drops the edit and then leaves the file. The menu is
+-- the top level, where Esc leaves the game for the console,
+-- as Ctrl+Q does from anywhere.
 --
--- One shortcut decides both steps. A combo is offered the key
+-- One shortcut decides every step. A combo is offered the key
 -- before the command widget is, so a shown widget cannot hide
 -- the gesture. It takes only a bare Esc, and only its press:
 -- a chord with Esc is no command here, and a held Esc that
--- emptied the field does not go on to leave. The typed "<"
--- command stays too.
+-- emptied the field or reached the menu goes no further. The
+-- typed "<" command stays too.
 
 function on_escape()
   local typed = (compy.input.get_text() or "") ~= ""
@@ -202,6 +203,8 @@ function on_escape()
     plan_reset()
   elseif GS.mode == "game" then
     to_menu()
+  else
+    stop()
   end
 end
 

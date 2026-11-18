@@ -21,8 +21,8 @@ Output ends with a summary line:
     10 passed, 0 failed, 0 pending
     3 passed, 0 failed, 0 pending
     4 passed, 0 failed, 0 pending
-    20 passed, 0 failed, 0 pending
-    26 passed, 0 failed, 0 pending
+    28 passed, 0 failed, 0 pending
+    34 passed, 0 failed, 0 pending
 
 Exit code is `0` when nothing failed, non-zero otherwise,
 so the same command works in a CI check. A failure prints
@@ -62,13 +62,15 @@ the feature exists. When a feature lands, its
   program: a bare Esc empties a field that holds text (and
   maze's plan when it holds keys) and steps back to the menu
   from an empty one or a level with neither; at the menu it
-  does nothing; Esc with Ctrl, Alt or Shift held does none of
-  this and leaves the field shown; a held Esc acts once; the
-  field is given no cancel flag of its own.
+  leaves the program; Esc with Ctrl, Alt or Shift held does
+  none of this and leaves the field shown; a held Esc acts
+  once, so one that reached the menu stays there; the field
+  is given no cancel flag of its own.
 - `input_standin.lua` — the stand-in for the runtime's input
   routing the two Escape specs run the programs against,
   with the field's cancel as the IDE has it: a bare Esc,
   acting only under `clear_on_cancel` or `hide_on_cancel`.
+  Its `stop()` counts its calls in `stops`.
 
 ## Scope
 

@@ -8,7 +8,8 @@ recorded source identity and the previous project is backed up.
 1. Launch Maze and confirm the three-item maze menu appears.
 2. Open Drive the robot and complete one direct-control level.
 3. Toggle the grid with the Menu key in both directions.
-4. Return to the menu with Esc.
+4. Return to the menu with Esc. Open Drive the robot again and
+   hold Esc for two seconds: the maze menu shows and stays.
 5. Open Plan a path, enter a short plan, run it, and retry it.
 6. Return to the menu with Esc and open Plan a path again, so
    the plan can be edited (a won level locks it). Enter keys
@@ -25,7 +26,11 @@ recorded source identity and the previous project is backed up.
    Alt+Esc and Alt+Shift+Esc, and confirm the text and the
    level stay. Press Esc and confirm the field empties and the
    level stays; press Esc again and confirm the maze menu.
-8. Leave through Ctrl+Q and confirm the console is usable.
+8. At the maze menu, press Shift+Esc, Alt+Esc and
+   Alt+Shift+Esc and confirm the menu stays; press Esc and
+   confirm Maze leaves for the console.
+9. Launch Maze again, open a track, leave through Ctrl+Q and
+   confirm the console is usable.
 
 ## B. Draw Acceptance
 
@@ -66,5 +71,11 @@ recorded source identity and the previous project is backed up.
 14. Complete Dog, press Tab, and confirm Draw returns to its
     menu.
 15. Return to the menu from a running picture program with `<`,
-    and again with Esc on an empty field.
-16. Leave through Ctrl+Q and confirm the console is usable.
+    and again with Esc on an empty field. Open Draw the picture
+    again and hold Esc for two seconds on an empty field: the
+    draw menu shows and stays.
+16. At the draw menu, press Shift+Esc, Alt+Esc and
+    Alt+Shift+Esc and confirm the menu stays; press Esc and
+    confirm Draw leaves for the console.
+17. Launch Draw again, open Free draw, leave through Ctrl+Q and
+    confirm the console is usable.
