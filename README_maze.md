@@ -252,9 +252,7 @@ any commands after it are not run.
               return to the maze menu; at the menu,
               leave Maze for the console
   Ctrl+Q    — leave Maze for the console at once
-  <         — leave a running program back to the menu
 
-Type < and press Enter to leave a running program.
 Esc works while editing and while planning: the first
 press empties what you typed, and the next one returns
 to the menu. While the robot is running a plan, Esc

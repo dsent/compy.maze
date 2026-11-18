@@ -50,7 +50,7 @@ and no device:
 
 1. every `.lua` compiles (`luac -p`), generated sprites aside;
 2. the command-core spec passes (`lua spec/script_spec.lua`,
-   expect `29 passed, 0 failed, 0 pending`);
+   expect `30 passed, 0 failed, 0 pending`);
 3. the Draw level-data spec passes
    (`lua spec/draw_levels_spec.lua`, expect
    `8 passed, 0 failed, 0 pending`);

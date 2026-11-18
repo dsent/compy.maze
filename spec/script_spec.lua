@@ -45,10 +45,10 @@ T.it("maze constants: primitive set reconstituted", function()
   T.eq(PRIMITIVES, {
     N = true, E = true, S = true, W = true,
     F = true, B = true, L = true, R = true,
-    ["."] = true, [","] = true, ["<"] = true
+    ["."] = true, [","] = true
   })
   T.eq(SILENT_CMDS, {
-    ["."] = true, [","] = true, ["<"] = true
+    ["."] = true, [","] = true
   })
 end)
 
@@ -70,6 +70,10 @@ end)
 
 T.it("validate: non-letter junk -> Invalid input", function()
   T.eq(validate_program({ "3Q" }), mark(1, 1, "Invalid input"))
+end)
+
+T.it("validate: a typed < is unknown -> Invalid input", function()
+  T.eq(validate_program({ "E<" }), mark(1, 2, "Invalid input"))
 end)
 
 T.it("validate: column tracks across ; statements", function()

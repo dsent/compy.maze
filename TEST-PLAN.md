@@ -26,6 +26,8 @@ recorded source identity and the previous project is backed up.
    Alt+Esc and Alt+Shift+Esc, and confirm the text and the
    level stay. Press Esc and confirm the field empties and the
    level stays; press Esc again and confirm the maze menu.
+   Back on that level, type `<`, press Enter, and confirm it
+   is refused as invalid input.
 8. At the maze menu, press Shift+Esc, Alt+Esc and
    Alt+Shift+Esc and confirm the menu stays; press Esc and
    confirm Maze leaves for the console.
@@ -45,8 +47,9 @@ recorded source identity and the previous project is backed up.
    seconds and confirm the field empties and Free draw stays.
 3. Confirm Free draw has the original 8x8 canvas, right-side
    compass, cumulative trail, bottom-left start, and soft edge.
-4. Return to the menu from Free draw by typing `<`, with the
-   command field active and no program running.
+4. Type `<` in Free draw, press Enter, and confirm it is
+   refused as invalid input. Press Esc to empty the field, then
+   hold Esc for two seconds: the draw menu shows and stays.
 5. Open Draw the picture. Confirm Picture 1/20 is Line and its
    target appears on an 8x8 grid above the compass with a green
    start marker at the same coordinates as the playing field.
@@ -70,10 +73,9 @@ recorded source identity and the previous project is backed up.
     and the trail and robot stay.
 14. Complete Dog, press Tab, and confirm Draw returns to its
     menu.
-15. Return to the menu from a running picture program with `<`,
-    and again with Esc on an empty field. Open Draw the picture
-    again and hold Esc for two seconds on an empty field: the
-    draw menu shows and stays.
+15. Return to the menu from a picture with Esc on an empty
+    field. Open Draw the picture again and hold Esc for two
+    seconds on an empty field: the draw menu shows and stays.
 16. At the draw menu, press Shift+Esc, Alt+Esc and
     Alt+Shift+Esc and confirm the menu stays; press Esc and
     confirm Draw leaves for the console.

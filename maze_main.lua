@@ -192,8 +192,7 @@ end
 -- before the command widget is, so a shown widget cannot hide
 -- the gesture. It takes only a bare Esc, and only its press:
 -- a chord with Esc is no command here, and a held Esc that
--- emptied the field or reached the menu goes no further. The
--- typed "<" command stays too.
+-- emptied the field or reached the menu goes no further.
 
 function on_escape()
   local typed = (compy.input.get_text() or "") ~= ""

@@ -17,7 +17,7 @@ From the repository root (also works from inside `spec/`):
 
 Output ends with a summary line:
 
-    29 passed, 0 failed, 0 pending
+    30 passed, 0 failed, 0 pending
     10 passed, 0 failed, 0 pending
     3 passed, 0 failed, 0 pending
     4 passed, 0 failed, 0 pending

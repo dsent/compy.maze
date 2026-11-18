@@ -25,14 +25,15 @@ T.it("picture mode accepts silent next and previous commands", function()
   T.eq(SILENT_CMDS[","], true)
 end)
 
--- Both mini-games keep the typed exit beside Esc.
+-- Esc is the way back to the menu: a typed "<" is an
+-- unknown token in both mini-games.
 
-T.it("both mini-games accept the silent exit command", function()
+T.it("both mini-games refuse a typed <", function()
   setPictureNavigationEnabled(false)
-  T.eq(validate_program({ "<" }), nil)
+  T.eq(validate_program({ "<" }).msg, "Invalid input")
   setPictureNavigationEnabled(true)
-  T.eq(validate_program({ "<" }), nil)
-  T.eq(SILENT_CMDS["<"], true)
+  T.eq(validate_program({ "<" }).msg, "Invalid input")
+  T.eq(PRIMITIVES["<"], nil)
 end)
 
 T.run()

@@ -115,16 +115,9 @@ function stepPictureLevel(cmd)
   jumpPictureLevel(sign * takeDrawLevelRepeats(cmd))
 end
 
--- TEMPORARY: the typed exit registered in draw_constants.lua.
-
-function exitToDrawMenu()
-  toDrawMenu()
-end
-
 CMD_HANDLERS = {
   ["."] = stepPictureLevel,
   [","] = stepPictureLevel,
-  ["<"] = exitToDrawMenu,
   F = draw_move,
   B = draw_move,
   L = start_turn,
@@ -359,8 +352,7 @@ end
 -- draw at all: that mode keeps its field shown the whole
 -- time. It takes only a bare Esc, and only its press: a chord
 -- with Esc is no command here, and a held Esc that emptied
--- the field or reached the menu goes no further. The typed
--- "<" exit stays.
+-- the field or reached the menu goes no further.
 
 function on_escape()
   local typed = (compy.input.get_text() or "") ~= ""

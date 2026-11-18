@@ -141,15 +141,10 @@ scale and coordinates as the playing field.
 
 ## Leaving
 
-  <         — return to the drawing-game menu
   Esc       — empty the text field; from an empty field,
               return to the drawing-game menu; at the
               menu, leave Draw for the console
   Ctrl+Q    — leave Draw for the console at once
-
-Type < and press Enter to go back to the drawing-game menu.
-It works in both drawing games, and commands after it do not
-run.
 
 Esc works while editing, while a program is running, and
 after a completed picture. When the field holds text, the

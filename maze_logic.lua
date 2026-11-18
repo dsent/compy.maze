@@ -334,14 +334,9 @@ function step_level(cmd)
   jump_level(sign * take_repeats(cmd))
 end
 
-function exit_to_menu()
-  to_menu()
-end
-
 CMD_HANDLERS = {
   ["."] = step_level,
   [","] = step_level,
-  ["<"] = exit_to_menu,
   L = start_turn,
   R = start_turn,
   F = start_move,
