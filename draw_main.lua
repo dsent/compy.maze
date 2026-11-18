@@ -127,8 +127,14 @@ CMD_HANDLERS = {
 
 -- Layout
 
+-- The grid keeps clear of the FIELD_ROWS the runtime covers.
+-- Two of the font's own heights are taller than those rows,
+-- the status line's extra pixels and the bottom strip
+-- included, so the 8x8 grid, whose robot starts bottom-left,
+-- sits above the band.
+
 function editor_band_h()
-  return EDITOR_ROWS * gfx.getFont():getHeight()
+  return FIELD_ROWS * gfx.getFont():getHeight()
 end
 
 function legend_band_w()

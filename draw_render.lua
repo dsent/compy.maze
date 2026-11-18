@@ -52,10 +52,7 @@ function drawFieldHint()
 end
 
 function legendBlockTop()
-  local font = gfx.getFont()
-  local _, lines = cur_legend:gsub("\n", "")
-  local text_h = font:getHeight() * (lines + 1)
-  return (gfx.getHeight() - text_h) - font:getHeight()
+  return legend_top(gfx.getFont())
 end
 
 function previewGeometry()

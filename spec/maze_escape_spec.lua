@@ -40,10 +40,12 @@ T.it("the field is given no cancel flag", function()
 end)
 
 -- A click is no command: no mouse hook takes it, so the
--- runtime hands it to the field.
+-- runtime hands it to the field. The runtime makes a
+-- love.mousepressed a hook too, so neither may be set.
 
 T.it("no mouse hook takes a click from the field", function()
   T.eq(compy.input.hooks.mousepressed, nil)
+  T.eq(love.mousepressed, nil)
 end)
 
 T.it("Esc empties the field and stays in the level", function()

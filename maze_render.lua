@@ -163,28 +163,21 @@ function macro_lines(letters)
   return lines
 end
 
-function legend_lines()
-  if not cur_legend then
-    return 0
-  end
-  local _, n = cur_legend:gsub("\n", "")
-  return n + 1
-end
-
 function draw_macros_list()
   local letters = macro_letters()
   local lines = macro_lines(letters)
   local font = gfx.getFont()
   local fh = font:getHeight()
-  local w, h = gfx.getDimensions()
+  local row = text_row(font)
+  local w = gfx.getWidth()
   local x = (w - fh) - font:getWidth(
     string.rep("X", MACRO_LINE_LEN)
   )
-  local y = h - fh * (1 + legend_lines() + #lines)
+  local y = legend_top(font) - row * #lines
   gfx.setColor(Color[Color.black])
   for _, line in ipairs(lines) do
     gfx.print(line, x, y)
-    y = y + fh
+    y = y + row
   end
 end
 
@@ -418,10 +411,9 @@ end
 -- as drawn by draw_hud_corner.
 
 function hud_corner_top()
-  local fh = gfx.getFont():getHeight()
-  local lines = 1 + legend_lines()
-      + #macro_lines(macro_letters())
-  return gfx.getHeight() - fh * lines - hud_lift()
+  local font = gfx.getFont()
+  local macro_h = text_row(font) * #macro_lines(macro_letters())
+  return legend_top(font) - macro_h - hud_lift()
 end
 
 function draw_hud_corner()

@@ -200,15 +200,41 @@ function legend_left(font)
   return (w - fw) - font:getHeight()
 end
 
+-- The legend's printed lines; legend.txt ends in a newline,
+-- which prints no line.
+
+function legend_lines()
+  if not cur_legend then
+    return 0
+  end
+  local text = cur_legend:gsub("\n$", "")
+  local _, n = text:gsub("\n", "")
+  return n + 1
+end
+
+-- The distance between two printed lines: the font's height
+-- times the line height the runtime sets on its font, which
+-- is what print steps by.
+
+function text_row(font)
+  return font:getHeight() * font:getLineHeight()
+end
+
+-- Top of the legend block, the same on every level: its last
+-- line ends one row above the FIELD_ROWS the runtime covers,
+-- the row being the margin the runtime's taller status line
+-- and its bottom strip need.
+
+function legend_top(font)
+  local rows = legend_lines() + 1 + FIELD_ROWS
+  return gfx.getHeight() - text_row(font) * rows
+end
+
 function draw_legend()
   if not cur_legend then
     return
   end
-  local h = gfx.getHeight()
   local font = gfx.getFont()
-  local fh = font:getHeight()
-  local _, n = cur_legend:gsub("\n", "")
-  local th = fh * (n + 1)
   gfx.setColor(Color[Color.black])
-  gfx.print(cur_legend, legend_left(font), (h - th) - fh)
+  gfx.print(cur_legend, legend_left(font), legend_top(font))
 end

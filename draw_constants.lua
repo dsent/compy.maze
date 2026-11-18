@@ -10,14 +10,6 @@ CANVAS = {
   cols = 8
 }
 
--- The runtime draws its command editor as a band across the
--- bottom (a prompt, the input line and a status line) -- three
--- text rows, measured on device. Reserve that height so the
--- 8x8 grid, whose robot starts bottom-left, sits above the
--- band, as the runtime's own drawable height drops its rows.
-
-EDITOR_ROWS = 2
-
 -- Picture tasks reserve a wider right panel so the target
 -- stays readable above the unchanged command legend.
 
