@@ -34,15 +34,13 @@ MAX_MACRO_LEN = 7
 MACRO_LINE_LEN = 8
 
 -- Maze-only navigation commands layered on the core set:
--- "." next level, "," previous level, "<" exit to menu.
--- All silent (no movement ping).
+-- "." next level, "," previous level. Both silent (no
+-- movement ping).
 
 PRIMITIVES["."] = true
 PRIMITIVES[","] = true
-PRIMITIVES["<"] = true
 SILENT_CMDS["."] = true
 SILENT_CMDS[","] = true
-SILENT_CMDS["<"] = true
 
 -- Plan-a-path buffer: tile capacity, tiles per row, and
 -- the run prompt.

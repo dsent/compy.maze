@@ -20,7 +20,8 @@ maze. Press a number to begin:
 
 You can return to this menu while playing by
 pressing Esc. If you are typing a command or a plan, the
-first Esc empties it and the next one returns.
+first Esc empties it and the next one returns. Esc at this
+menu leaves Maze.
 
 ## Controls
 
@@ -135,11 +136,17 @@ command — turns (3L, 3R) and moves (4N, 3F) too.
 Give a name to a sequence of commands by typing a
 letter, an equal sign, and the commands:
 
-    X=3R
+    X=3R;X
 
-Now typing X anywhere runs three right turns.
+Now X runs three right turns, later in the same
+program. A shortcut lasts for the program it is in, so
+define it and use it in one go: on one line with
+semicolons, or on several lines with Shift+Enter. When
+a program wins a level, its shortcuts come along to the
+next one.
 
-Shortcuts can build on each other:
+Shortcuts can build on each other. Type these three
+lines with Shift+Enter between them, then press Enter:
 
     X=3R
     X=2X
@@ -242,21 +249,26 @@ You can also move between levels yourself:
 Put a number in front to jump several: 3. jumps three
 levels forward and 2, jumps two back (it stops at the
 first and last level). The program ends at the jump —
-any commands after it are not run.
+any moves after it are not run. The shortcuts your
+program defines, before or after the jump, come with
+you to the new level. A jump that stays on the same
+level, such as , on the first one, starts it over and
+keeps none of them.
 
 ## Leaving
 
   Esc       — empty the command field or the plan; from
               an empty one, or a level with neither,
-              return to the maze menu
-  Ctrl+Q    — leave Maze for the console
-  <         — leave a running program back to the menu
+              return to the maze menu; at the menu,
+              leave Maze for the console
+  Ctrl+Q    — leave Maze for the console at once
 
-Type < and press Enter to leave a running program.
 Esc works while editing and while planning: the first
 press empties what you typed, and the next one returns
 to the menu. While the robot is running a plan, Esc
-returns to the menu at once.
+returns to the menu at once. Each Esc goes back one step,
+so holding it down stops at the menu. Ctrl+Q leaves Maze
+from anywhere.
 
 ## Grid
 

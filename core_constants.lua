@@ -40,6 +40,14 @@ TRACK = {
 
 TRACE = { radius_frac = 0.08 }
 
+-- The screen's bottom rows the runtime covers: a shown
+-- command field takes two, its status line (the prompt and
+-- the cursor's place) and its input line, and with no field
+-- the runtime's own status line takes the last. The HUD
+-- keeps clear of both rows on every level, field or not.
+
+FIELD_ROWS = 2
+
 -- Maximum echo lines visible on screen.
 
 MAX_ECHO_LINES = 16

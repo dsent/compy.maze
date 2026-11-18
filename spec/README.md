@@ -12,17 +12,21 @@ From the repository root (also works from inside `spec/`):
     lua spec/draw_levels_spec.lua
     lua spec/draw_mode_spec.lua
     lua spec/draw_menu_guard_spec.lua
+    lua spec/draw_run_spec.lua
+    lua spec/maze_run_spec.lua
     lua spec/draw_escape_spec.lua
     lua spec/maze_escape_spec.lua
 
 Output ends with a summary line:
 
-    29 passed, 0 failed, 0 pending
+    30 passed, 0 failed, 0 pending
     10 passed, 0 failed, 0 pending
     3 passed, 0 failed, 0 pending
     4 passed, 0 failed, 0 pending
-    20 passed, 0 failed, 0 pending
-    26 passed, 0 failed, 0 pending
+    11 passed, 0 failed, 0 pending
+    5 passed, 0 failed, 0 pending
+    29 passed, 0 failed, 0 pending
+    35 passed, 0 failed, 0 pending
 
 Exit code is `0` when nothing failed, non-zero otherwise,
 so the same command works in a CI check. A failure prints
@@ -58,17 +62,42 @@ the feature exists. When a feature lands, its
   picture mode's scoped next/previous commands.
 - `draw_menu_guard_spec.lua` — the menu key's one-time echo
   guards: armed per menu key, all cleared by the first fire.
+- `draw_run_spec.lua` — every draw run starts from a clean
+  canvas and the robot's start, `C` clears in the middle of
+  a program, and the field keeps the program; a shortcut
+  lives in its own program, and only the program that
+  completes a picture, or jumps, carries its shortcuts to
+  the next picture; every picture's route is one valid
+  program on one field line that completes it. Enter after a
+  win runs again and can win again, and Tab moves on; a
+  rejected program keeps the winning program's shortcuts.
+- `maze_run_spec.lua` — maze's shortcut rule, which draw
+  follows: an earlier run's shortcut is unknown, and a jump
+  or a win carries the program's shortcuts to the next level.
+  Enter in place of Tab after a miss runs and is judged; a
+  level is judged once per run, never on entry, Maze 5
+  included right after Maze 4's automatic advance.
+- Both run specs drive the program as a child does: a
+  program goes in through the field's Enter (`submit`), the
+  run goes on in `love.update` (`tick`), and Tab moves on.
 - `draw_escape_spec.lua`, `maze_escape_spec.lua` — Esc in each
-  program: a bare Esc empties a field that holds text (and
-  maze's plan when it holds keys) and steps back to the menu
-  from an empty one or a level with neither; at the menu it
-  does nothing; Esc with Ctrl, Alt or Shift held does none of
-  this and leaves the field shown; a held Esc acts once; the
-  field is given no cancel flag of its own.
+  program, as the keys are delivered to it: a bare Esc
+  empties a field that holds text (and maze's plan when it
+  holds keys) and steps back to the menu from an empty one
+  or a level with neither; at the menu it leaves the
+  program; Esc with Ctrl, Alt or Shift held, when it reaches
+  the program, does none of this and leaves the field shown
+  (Ctrl+Esc never reaches it: the IDE keeps that chord and
+  quits on it); a held Esc acts once, so one that reached the
+  menu stays there; the field is given no cancel flag of its
+  own, and no mouse hook takes a click from it.
 - `input_standin.lua` — the stand-in for the runtime's input
-  routing the two Escape specs run the programs against,
+  routing the Escape and run specs run the programs against,
   with the field's cancel as the IDE has it: a bare Esc,
-  acting only under `clear_on_cancel` or `hide_on_cancel`.
+  acting only under `clear_on_cancel` or `hide_on_cancel`;
+  its Enter empties the field before `on_text_entered`, as
+  the IDE's `clear_on_submit` does. Its `stop()` counts its
+  calls in `stops`.
 
 ## Scope
 

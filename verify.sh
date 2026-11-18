@@ -47,6 +47,12 @@ echo "== draw-mode spec (from repo) =="
 echo "== draw-menu echo-guard spec (from repo) =="
 ( cd "$SRC" && "$LUA" spec/draw_menu_guard_spec.lua ) || fail=1
 
+echo "== draw run spec (from repo) =="
+( cd "$SRC" && "$LUA" spec/draw_run_spec.lua ) || fail=1
+
+echo "== maze shortcut-carry spec (from repo) =="
+( cd "$SRC" && "$LUA" spec/maze_run_spec.lua ) || fail=1
+
 echo "== draw Escape spec (from repo) =="
 ( cd "$SRC" && "$LUA" spec/draw_escape_spec.lua ) || fail=1
 

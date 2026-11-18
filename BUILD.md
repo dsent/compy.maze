@@ -50,22 +50,36 @@ and no device:
 
 1. every `.lua` compiles (`luac -p`), generated sprites aside;
 2. the command-core spec passes (`lua spec/script_spec.lua`,
-   expect `29 passed, 0 failed, 0 pending`);
+   expect `30 passed, 0 failed, 0 pending`);
 3. the Draw level-data spec passes
    (`lua spec/draw_levels_spec.lua`, expect
-   `8 passed, 0 failed, 0 pending`);
+   `10 passed, 0 failed, 0 pending`);
 4. the Draw mini-game command-scope spec passes
    (`lua spec/draw_mode_spec.lua`, expect
-   `2 passed, 0 failed, 0 pending`);
-5. each project is self-contained -- every `require` resolves
-   inside its own folder, except the runtime modules
-   (`utf8`, `gfx`, `Color`, `compy.audio`).
+   `3 passed, 0 failed, 0 pending`);
+5. the Draw menu echo-guard spec passes
+   (`lua spec/draw_menu_guard_spec.lua`, expect
+   `4 passed, 0 failed, 0 pending`);
+6. the Draw run spec passes
+   (`lua spec/draw_run_spec.lua`, expect
+   `11 passed, 0 failed, 0 pending`);
+7. the Maze shortcut-carry spec passes
+   (`lua spec/maze_run_spec.lua`, expect
+   `5 passed, 0 failed, 0 pending`);
+8. the Draw Escape spec passes
+   (`lua spec/draw_escape_spec.lua`, expect
+   `29 passed, 0 failed, 0 pending`);
+9. the Maze Escape spec passes
+   (`lua spec/maze_escape_spec.lua`, expect
+   `35 passed, 0 failed, 0 pending`);
+10. each project is self-contained -- every `require`
+    resolves inside its own folder, except the runtime
+    modules (`utf8`, `gfx`, `Color`, `compy.audio`).
 
 `spec/` stays at the repo root and runs on the host; it is
-not shipped into the emitted projects. Run them directly from
-the repo root with `lua spec/script_spec.lua`,
-`lua spec/draw_levels_spec.lua`, and
-`lua spec/draw_mode_spec.lua`.
+not shipped into the emitted projects. Run each spec directly
+from the repo root with `lua spec/<name>.lua`;
+`spec/README.md` lists them.
 
 ## Verify (on device)
 

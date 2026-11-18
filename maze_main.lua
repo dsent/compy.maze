@@ -165,34 +165,27 @@ end
 
 SYSTEM_KEYS = { }
 
+-- The Menu key toggles the grid. A click is no command: the
+-- program takes no mouse hook, so a click reaches the command
+-- field, where it places the cursor.
+
 function SYSTEM_KEYS.menu()
   cur_grid = not cur_grid
   sfx.sword()
 end
 
--- A hook rather than love.mousepressed: this program shows the
--- command widget on editor levels, and a handler captured from
--- love.* consumes its channel outright, leaving nothing for
--- anything below it (doc/input_api.md, "Event hooks and
--- shortcuts -- when to use which"). Every click toggles the
--- grid here, so every click is claimed.
-compy.input.hooks.mousepressed = function()
-  SYSTEM_KEYS.menu()
-  return true
-end
-
 -- Esc empties the command field when it holds text, and a
 -- plan that holds keys; from an empty one, or a level with
--- neither, it steps back to the track menu, as the editor first drops the edit and then
--- leaves the file. The menu is the top level, where Esc does
--- nothing (leaving the game for the console is Ctrl+Q).
+-- neither, it steps back to the track menu, as the editor
+-- first drops the edit and then leaves the file. The menu is
+-- the top level, where Esc leaves the game for the console,
+-- as Ctrl+Q does from anywhere.
 --
--- One shortcut decides both steps. A combo is offered the key
+-- One shortcut decides every step. A combo is offered the key
 -- before the command widget is, so a shown widget cannot hide
 -- the gesture. It takes only a bare Esc, and only its press:
 -- a chord with Esc is no command here, and a held Esc that
--- emptied the field does not go on to leave. The typed "<"
--- command stays too.
+-- emptied the field or reached the menu goes no further.
 
 function on_escape()
   local typed = (compy.input.get_text() or "") ~= ""
@@ -202,6 +195,8 @@ function on_escape()
     plan_reset()
   elseif GS.mode == "game" then
     to_menu()
+  else
+    stop()
   end
 end
 

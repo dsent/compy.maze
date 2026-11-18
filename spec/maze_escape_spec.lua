@@ -1,9 +1,9 @@
 -- Esc in maze: a bare Esc empties a command field that holds
--- text and a plan that holds keys, and from an empty one or a
--- level with neither steps back to the track menu; at the
--- menu it does nothing. Esc with Ctrl, Alt or Shift held does
--- none of this, and a held Esc acts once. maze_main.lua runs here against the stand-in
--- in input_standin.lua.
+-- text and a plan that holds keys, from an empty one or a
+-- level with neither steps back to the track menu, and at the
+-- menu leaves the program. Esc with Ctrl, Alt or Shift held
+-- does none of this, and a held Esc acts once. maze_main.lua
+-- runs here against the stand-in in input_standin.lua.
 
 local here = arg[0]:match("^(.*)/[^/]*$") or "."
 dofile(here .. "/support.lua")
@@ -39,6 +39,15 @@ T.it("the field is given no cancel flag", function()
   T.eq(widget.flags.hide_on_cancel, nil)
 end)
 
+-- A click is no command: no mouse hook takes it, so the
+-- runtime hands it to the field. The runtime makes a
+-- love.mousepressed a hook too, so neither may be set.
+
+T.it("no mouse hook takes a click from the field", function()
+  T.eq(compy.input.hooks.mousepressed, nil)
+  T.eq(love.mousepressed, nil)
+end)
+
 T.it("Esc empties the field and stays in the level", function()
   in_game("FF")
   press({ }, "escape")
@@ -59,12 +68,37 @@ T.it("Esc in a level with no field goes to the menu", function()
   T.eq(GS.mode, "menu")
 end)
 
-T.it("Esc at the menu does nothing", function()
+local function at_menu()
   GS.mode = "menu"
   widget.shown = false
+  stops = 0
+end
+
+T.it("Esc at the menu leaves the program", function()
+  at_menu()
   press({ }, "escape")
-  T.eq(GS.mode, "menu")
+  T.eq(stops, 1)
 end)
+
+T.it("a held Esc that reaches the menu stays there", function()
+  in_game("")
+  stops = 0
+  press({ }, "escape")
+  press({ }, "escape", true)
+  press({ }, "escape", true)
+  T.eq(GS.mode, "menu")
+  T.eq(stops, 0)
+end)
+
+for _, mods in ipairs(ESC_CHORDS) do
+  local name = table.concat(mods, "+") .. "+escape"
+  T.it(name .. " at the menu does nothing", function()
+    at_menu()
+    press(mods, "escape")
+    T.eq(stops, 0, name)
+    T.eq(GS.mode, "menu", name)
+  end)
+end
 
 T.it("a held Esc empties the field and stays in the level",
   function()

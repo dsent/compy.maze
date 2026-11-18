@@ -1,7 +1,8 @@
 -- draw_main.lua
 
 -- Draw contains two mini-games on the shared command core:
--- the original cumulative free canvas and 20 picture tasks.
+-- the free canvas and 20 picture tasks. Each run draws its
+-- whole program from a clean start, as maze runs its level.
 
 require("core_constants")
 require("draw_constants")
@@ -55,7 +56,16 @@ function blocked(tc, tr)
   return tc < 1 or GRID.cols < tc or tr < 1 or GRID.rows < tr
 end
 
+-- A validated program runs from a clean start, as maze
+-- resets its level: the drawing goes, the robot is back on
+-- its start cell and heading, and nothing of an earlier run
+-- is queued. The field keeps the program, so the child edits
+-- it and runs it again.
+
 function before_run()
+  local col, row, dir = activeStart()
+  player_reset(col, row, dir)
+  GS.won = false
 end
 
 function after_step()
@@ -115,16 +125,9 @@ function stepPictureLevel(cmd)
   jumpPictureLevel(sign * takeDrawLevelRepeats(cmd))
 end
 
--- TEMPORARY: the typed exit registered in draw_constants.lua.
-
-function exitToDrawMenu()
-  toDrawMenu()
-end
-
 CMD_HANDLERS = {
   ["."] = stepPictureLevel,
   [","] = stepPictureLevel,
-  ["<"] = exitToDrawMenu,
   F = draw_move,
   B = draw_move,
   L = start_turn,
@@ -134,8 +137,14 @@ CMD_HANDLERS = {
 
 -- Layout
 
+-- The grid keeps clear of the FIELD_ROWS the runtime covers.
+-- Two of the font's own heights are taller than those rows,
+-- the status line's extra pixels and the bottom strip
+-- included, so the 8x8 grid, whose robot starts bottom-left,
+-- sits above the band.
+
 function editor_band_h()
-  return EDITOR_ROWS * gfx.getFont():getHeight()
+  return FIELD_ROWS * gfx.getFont():getHeight()
 end
 
 function legend_band_w()
@@ -322,6 +331,10 @@ end
 
 SYSTEM_KEYS = { }
 
+-- The Menu key toggles the picture hint. A click is no
+-- command: the program takes no mouse hook, so a click
+-- reaches the command field, where it places the cursor.
+
 function SYSTEM_KEYS.menu()
   if GS.draw_mode ~= "picture" then
     return
@@ -330,36 +343,19 @@ function SYSTEM_KEYS.menu()
   sfx.sword()
 end
 
--- A hook rather than love.mousepressed: Free draw keeps its
--- command widget shown for the whole mode, and a handler
--- captured from love.* consumes the channel outright
--- (doc/input_api.md, "Event hooks and shortcuts -- when to use
--- which"). Claimed only where it acts -- the hint toggle is a
--- picture-mode gesture, and elsewhere the click is not ours.
--- The mode test mirrors menu()'s own, which stays because the
--- key path calls it too; here it is what lets the return be
--- honest.
-compy.input.hooks.mousepressed = function()
-  if GS.draw_mode ~= "picture" then
-    return
-  end
-  SYSTEM_KEYS.menu()
-  return true
-end
-
 -- Esc empties the command field when it holds text, so the
 -- next step starts on a clean line: Esc, C, Enter. From an
 -- empty field Esc steps back to this program's menu, as the
 -- editor first drops the edit and then leaves the file. The
--- menu is the top level, where Esc does nothing.
+-- menu is the top level, where Esc leaves Draw for the
+-- console, as Ctrl+Q does from anywhere.
 --
--- One shortcut decides both steps. A combo is offered the key
+-- One shortcut decides every step. A combo is offered the key
 -- before the widget is, which is what makes it reach Free
 -- draw at all: that mode keeps its field shown the whole
 -- time. It takes only a bare Esc, and only its press: a chord
 -- with Esc is no command here, and a held Esc that emptied
--- the field does not go on to leave. The typed "<" exit
--- stays.
+-- the field or reached the menu goes no further.
 
 function on_escape()
   local typed = (compy.input.get_text() or "") ~= ""
@@ -367,6 +363,8 @@ function on_escape()
     compy.input.clear()
   elseif GS.screen == "game" then
     toDrawMenu()
+  else
+    stop()
   end
 end
 

@@ -122,27 +122,27 @@ end
 
 -- Init
 
--- Every level fits the playable grid plus bump headroom.
--- Plan levels box the field in with FIELD_MARGIN: it
--- clears the screen edges, the dock strip below and the
--- compass column on the right. Editor levels clear the
--- runtime console (status line + input line) instead.
+-- Every level fits the playable grid plus bump headroom,
+-- and keeps clear of the compass column on the right, where
+-- the legend, the macro list and the title sit. Plan levels
+-- also box the field in with FIELD_MARGIN: it clears the
+-- screen edges and the dock strip below. Editor levels clear
+-- the runtime console (status line + input line) instead.
 
 function plan_grid_opts(o)
-  local w = gfx.getWidth()
   o.margin = FIELD_MARGIN
-  o.pad_right = (w - legend_left(hud_font))
-      + FIELD_MARGIN
   o.pad_bottom = plan_zone_h()
   return o
 end
 
 function editor_pad_bottom()
-  return 2 * hud_font:getHeight() + FIELD_MARGIN
+  return FIELD_ROWS * hud_font:getHeight() + FIELD_MARGIN
 end
 
 function grid_opts()
   local o = { bump_pad = true }
+  local w = gfx.getWidth()
+  o.pad_right = (w - legend_left(hud_font)) + FIELD_MARGIN
   if cur_controls == plan then
     return plan_grid_opts(o)
   end
@@ -334,14 +334,9 @@ function step_level(cmd)
   jump_level(sign * take_repeats(cmd))
 end
 
-function exit_to_menu()
-  to_menu()
-end
-
 CMD_HANDLERS = {
   ["."] = step_level,
   [","] = step_level,
-  ["<"] = exit_to_menu,
   L = start_turn,
   R = start_turn,
   F = start_move,

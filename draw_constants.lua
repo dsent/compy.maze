@@ -10,14 +10,6 @@ CANVAS = {
   cols = 8
 }
 
--- The runtime draws its command editor as a band across the
--- bottom (a prompt, the input line and a status line) -- three
--- text rows, measured on device. Reserve that height so the
--- 8x8 grid, whose robot starts bottom-left, sits above the
--- band, as the runtime's own drawable height drops its rows.
-
-EDITOR_ROWS = 2
-
 -- Picture tasks reserve a wider right panel so the target
 -- stays readable above the unchanged command legend.
 
@@ -36,14 +28,6 @@ START = {
 
 PRIMITIVES.C = true
 SILENT_CMDS.C = true
-
--- TEMPORARY: "<" exits to the drawing-game menu, as Esc on
--- an empty field does. It dates from when no Esc reached a
--- program through its field (compy-maze-shift-esc-exit). Both
--- mini-games register it.
-
-PRIMITIVES["<"] = true
-SILENT_CMDS["<"] = true
 
 -- Picture-task navigation matches Maze, while Free draw's
 -- original command language stays unchanged.
