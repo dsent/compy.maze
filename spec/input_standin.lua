@@ -81,6 +81,9 @@ compy = {
     end,
     clear = function()
       widget.text = ""
+    end,
+    set_text = function(lines)
+      widget.text = table.concat(lines, "\n")
     end
   }
 }

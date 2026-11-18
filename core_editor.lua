@@ -21,8 +21,8 @@ end
 
 -- before_run() is supplied by the app and called by
 -- start_program once a program validates: the maze resets
--- the level, draw does nothing (the trail persists, the
--- robot continues). The core names it but never defines
+-- the level, and draw clears the drawing and sends the
+-- robot to its start. The core names it but never defines
 -- it.
 
 -- Editor input processing

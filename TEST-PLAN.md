@@ -39,15 +39,18 @@ recorded source identity and the previous project is backed up.
 
 1. Launch Draw and confirm the menu lists Free draw first and
    Draw the picture second.
-2. Open Free draw. Run commands in separate submissions,
-   confirm the trail and robot persist, then run C followed by
-   a movement in the same program. When the robot stops, press
+2. Open Free draw. Run `3e` and confirm three steps east and
+   that the field keeps `3e`; change it to `2n` and run it, and
+   confirm only two steps north from the start cell show. Run
+   `x=3e`, then `x`, and confirm "Unknown command: X"; run
+   `x=2e;x n x` and confirm it draws. Run C followed by a
+   movement in the same program. When the robot stops, press
    Esc and confirm the field empties and the trail and robot
    stay. Type `EE`, press Shift+Esc, Alt+Esc, then
    Alt+Shift+Esc, and confirm the text stays. Hold Esc for two
    seconds and confirm the field empties and Free draw stays.
 3. Confirm Free draw has the original 8x8 canvas, right-side
-   compass, cumulative trail, bottom-left start, and soft edge.
+   compass, bottom-left start, and soft edge.
 4. Type `<` in Free draw, press Enter, and confirm it is
    refused as invalid input. Press Esc to empty the field, then
    hold Esc for two seconds: the draw menu shows and stays.
@@ -59,7 +62,9 @@ recorded source identity and the previous project is backed up.
 7. Complete Line with `5E`; confirm the completion stripe shows
    the Tab key glyph.
 8. Press Tab. Confirm Picture 2/20 starts with its declared hint
-   default and a fresh trail at its own start point.
+   default, an empty field and a fresh trail at its own start
+   point. Run a wrong program, then a corrected one, and confirm
+   the corrected run starts clean.
 9. Run `.` and `,` to confirm next/previous navigation, then
    use a counted jump and confirm first/last clamping.
 10. Confirm Pictures 1-7 complete without retracing. Complete

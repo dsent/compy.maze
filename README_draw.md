@@ -29,8 +29,9 @@ drawn as one continuous trail. Some need you to travel over a
 line you already drew.
 
 When the trail matches the target, use the shown Tab key for
-the next picture. Extra lines are part of the drawing, so use C
-and try again if you want a fresh canvas.
+the next picture. Extra lines are part of the drawing, so change
+your program and run it again: every run starts on a fresh
+canvas.
 
 Some pictures start with a faint target line on the canvas and
 some start without it. Press the Menu key at any time to turn
@@ -40,9 +41,11 @@ this hint on or off.
 
 Type commands in the text field at the bottom and press Enter
 to run them. You hear a ping for each command except C. Clearing
-the canvas is silent. Press Esc to empty the text field for
-your next commands. Esc on an empty field returns to the
-drawing-game menu, and Esc at that menu leaves Draw.
+the canvas is silent. Your program stays in the field after it
+runs, so you can change it and press Enter to run it again.
+Press Esc to empty the field and start a new program. Esc on an
+empty field returns to the drawing-game menu, and Esc at that
+menu leaves Draw.
 
 You can give directions on a compass:
 
@@ -79,11 +82,15 @@ This moves east three times.
 Give a name to a sequence by typing a letter, an equal sign and
 the commands:
 
-    X=3E
+    X=3E;X;N;X
 
-Now typing X runs three steps east. Shortcuts can build on each
-other. N, E, S, W, F, B, L, R and C are already commands, so
-they cannot name shortcuts.
+Now X runs three steps east, later in the same program. Put the
+shortcut and its uses on one line with semicolons, or on several
+lines with Shift+Enter. A shortcut lasts for the program it is
+in. When a program completes a picture, its shortcuts come along
+to the next picture. Shortcuts can build on each other. N, E,
+S, W, F, B, L, R and C are already commands, so they cannot
+name shortcuts.
 
 ### Multiple Lines And Errors
 
@@ -95,9 +102,9 @@ soft sound so you can fix it.
 ## What Happens
 
 The robot turns and moves with a short animation. Moving forward
-leaves a bright trail. Moving backward leaves no trail. The
-trail builds across runs, and the robot keeps going from where
-it stopped, so you can draw a little at a time.
+leaves a bright trail. Moving backward leaves no trail. Every
+run starts on a clean canvas with the robot at its start, so
+the drawing shows what your whole program does.
 
 None of the 20 picture tasks requires moving backward without
 drawing.
@@ -119,6 +126,8 @@ picture task it is the green starting point, facing along the
 first part of the target.
 
 C runs silently. Commands after it continue on the fresh canvas.
+Every run already starts on a fresh canvas; C clears one in the
+middle of a program.
 
 ## Moving Between Pictures
 
@@ -129,8 +138,9 @@ In Draw the picture, use the same level commands as Maze:
 
 Put a number in front to jump several: 3. moves three pictures
 forward and 2, moves two back, stopping at the first or last
-picture. A jump opens a fresh copy of its destination picture;
-commands after the jump do not run.
+picture. A jump opens a fresh copy of its destination picture
+with an empty text field; commands after the jump do not run,
+and the program's shortcuts come along.
 
 ## The Screen
 

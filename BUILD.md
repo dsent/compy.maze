@@ -60,15 +60,21 @@ and no device:
 5. the Draw menu echo-guard spec passes
    (`lua spec/draw_menu_guard_spec.lua`, expect
    `4 passed, 0 failed, 0 pending`);
-6. the Draw Escape spec passes
+6. the Draw run spec passes
+   (`lua spec/draw_run_spec.lua`, expect
+   `8 passed, 0 failed, 0 pending`);
+7. the Maze shortcut-carry spec passes
+   (`lua spec/maze_run_spec.lua`, expect
+   `3 passed, 0 failed, 0 pending`);
+8. the Draw Escape spec passes
    (`lua spec/draw_escape_spec.lua`, expect
    `29 passed, 0 failed, 0 pending`);
-7. the Maze Escape spec passes
+9. the Maze Escape spec passes
    (`lua spec/maze_escape_spec.lua`, expect
    `35 passed, 0 failed, 0 pending`);
-8. each project is self-contained -- every `require` resolves
-   inside its own folder, except the runtime modules
-   (`utf8`, `gfx`, `Color`, `compy.audio`).
+10. each project is self-contained -- every `require`
+    resolves inside its own folder, except the runtime
+    modules (`utf8`, `gfx`, `Color`, `compy.audio`).
 
 `spec/` stays at the repo root and runs on the host; it is
 not shipped into the emitted projects. Run each spec directly

@@ -1,7 +1,8 @@
 -- draw_main.lua
 
 -- Draw contains two mini-games on the shared command core:
--- the original cumulative free canvas and 20 picture tasks.
+-- the free canvas and 20 picture tasks. Each run draws its
+-- whole program from a clean start, as maze runs its level.
 
 require("core_constants")
 require("draw_constants")
@@ -55,7 +56,16 @@ function blocked(tc, tr)
   return tc < 1 or GRID.cols < tc or tr < 1 or GRID.rows < tr
 end
 
+-- A validated program runs from a clean start, as maze
+-- resets its level: the drawing goes, the robot is back on
+-- its start cell and heading, and nothing of an earlier run
+-- is queued. The field keeps the program, so the child edits
+-- it and runs it again.
+
 function before_run()
+  local col, row, dir = activeStart()
+  player_reset(col, row, dir)
+  GS.won = false
 end
 
 function after_step()

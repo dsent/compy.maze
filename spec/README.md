@@ -12,6 +12,8 @@ From the repository root (also works from inside `spec/`):
     lua spec/draw_levels_spec.lua
     lua spec/draw_mode_spec.lua
     lua spec/draw_menu_guard_spec.lua
+    lua spec/draw_run_spec.lua
+    lua spec/maze_run_spec.lua
     lua spec/draw_escape_spec.lua
     lua spec/maze_escape_spec.lua
 
@@ -21,6 +23,8 @@ Output ends with a summary line:
     10 passed, 0 failed, 0 pending
     3 passed, 0 failed, 0 pending
     4 passed, 0 failed, 0 pending
+    8 passed, 0 failed, 0 pending
+    3 passed, 0 failed, 0 pending
     29 passed, 0 failed, 0 pending
     35 passed, 0 failed, 0 pending
 
@@ -58,6 +62,15 @@ the feature exists. When a feature lands, its
   picture mode's scoped next/previous commands.
 - `draw_menu_guard_spec.lua` — the menu key's one-time echo
   guards: armed per menu key, all cleared by the first fire.
+- `draw_run_spec.lua` — every draw run starts from a clean
+  canvas and the robot's start, and the field keeps the
+  program; a shortcut lives in its own program, and only the
+  program that completes a picture, or jumps, carries its
+  shortcuts to the next picture; every picture's route is
+  one valid program on one field line that completes it.
+- `maze_run_spec.lua` — maze's shortcut rule, which draw
+  follows: an earlier run's shortcut is unknown, and a jump
+  or a win carries the program's shortcuts to the next level.
 - `draw_escape_spec.lua`, `maze_escape_spec.lua` — Esc in each
   program: a bare Esc empties a field that holds text (and
   maze's plan when it holds keys) and steps back to the menu
@@ -68,7 +81,7 @@ the feature exists. When a feature lands, its
   is given no cancel flag of its own, and no mouse hook takes
   a click from it.
 - `input_standin.lua` — the stand-in for the runtime's input
-  routing the two Escape specs run the programs against,
+  routing the Escape and run specs run the programs against,
   with the field's cancel as the IDE has it: a bare Esc,
   acting only under `clear_on_cancel` or `hide_on_cancel`.
   Its `stop()` counts its calls in `stops`.
