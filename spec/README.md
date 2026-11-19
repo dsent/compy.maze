@@ -24,7 +24,7 @@ Output ends with a summary line:
     3 passed, 0 failed, 0 pending
     4 passed, 0 failed, 0 pending
     18 passed, 0 failed, 0 pending
-    15 passed, 0 failed, 0 pending
+    17 passed, 0 failed, 0 pending
     31 passed, 0 failed, 0 pending
     36 passed, 0 failed, 0 pending
 
@@ -81,7 +81,8 @@ the feature exists. When a feature lands, its
   follows: an earlier run's shortcut is unknown, and a jump
   or a win carries the program's shortcuts to the next level.
   The field is away while the robot moves and after a miss or
-  a crash until Tab, which brings the program back, and comes
+  a crash until Tab or Esc, which brings the program back,
+  and comes
   back empty for a celebration; Enter,
   keys and Tab change nothing during a run; Esc stops a run,
   even one whose last step reached the goal or put the last

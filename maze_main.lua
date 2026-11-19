@@ -178,8 +178,9 @@ end
 
 -- Esc while the robot runs a program stops it and brings the
 -- field back with the program (stop_run); while it runs a
--- plan, it stops the plan as a missed run ends (plan_stop).
--- Then it empties the command field when it holds text, and
+-- plan, it stops the plan (plan_stop). At the miss or crash
+-- banner it does what Tab does there (reset_after_fail): the
+-- banner is a level, and Esc goes one back. Then it empties the command field when it holds text, and
 -- a plan that holds keys; from an empty one, or a level with
 -- neither, it steps back to the track menu, as the editor
 -- first drops the edit and then leaves the file. The menu is
@@ -199,6 +200,8 @@ function on_escape()
     plan_stop()
   elseif GS.running then
     stop_run()
+  elseif GS.failed then
+    reset_after_fail()
   elseif typed then
     clear_field()
   elseif plan_holds_keys() then

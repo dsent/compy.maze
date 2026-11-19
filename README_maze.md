@@ -198,6 +198,9 @@ you can fix it and run it again.
 If a program finishes without reaching the goal, you
 see "Goal not reached. Press Tab to try again."
 
+Esc does the same as Tab at either message: the maze
+resets and your program comes back in the text field.
+
 When you reach the diamond with no commands left to
 run, you hear a victory sound and the diamond
 disappears. If more commands are queued, the robot
@@ -263,15 +266,18 @@ keeps none of them.
 
 ## Leaving
 
-  Esc       — stop the robot; then empty the command
-              field or the plan; from an empty one, or a
-              level with neither, return to the maze
-              menu; at the menu, leave Maze for the
+  Esc       — stop the robot, or try again after a
+              crash or a missed goal; then empty the
+              command field or the plan; from an empty
+              one, or a level with neither, return to the
+              maze menu; at the menu, leave Maze for the
               console
   Ctrl+Q    — leave Maze for the console at once
 
 While the robot runs your program or your plan, the
-first Esc stops it. While you edit or plan, Esc empties
+first Esc stops it. After a crash or a missed goal, the
+first Esc tries again, as Tab does. While you edit or
+plan, Esc empties
 what you typed, and the next one returns to the menu.
 Each Esc goes back one step, so holding it down stops
 the robot and goes no further. Ctrl+Q leaves Maze from
