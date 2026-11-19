@@ -76,6 +76,7 @@ end
 function open_editor(text)
   compy.input.show{
     prompt = input_prompt(),
+    max_rows = FIELD_ROWS - 1,
     text = string.lines(text),
     on_text_entered = submit_program,
     on_limit_reached = program_limit_reached,

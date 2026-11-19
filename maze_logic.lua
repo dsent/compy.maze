@@ -127,7 +127,7 @@ end
 -- the legend, the macro list and the title sit. Plan levels
 -- also box the field in with FIELD_MARGIN: it clears the
 -- screen edges and the dock strip below. Editor levels clear
--- the runtime console (status line + input line) instead.
+-- the runtime console (status line + input rows) instead.
 
 function plan_grid_opts(o)
   o.margin = FIELD_MARGIN

@@ -145,11 +145,11 @@ CMD_HANDLERS = {
 
 -- Layout
 
--- The grid keeps clear of the FIELD_ROWS the runtime covers.
--- Two of the font's own heights are taller than those rows,
--- the status line's extra pixels and the bottom strip
--- included, so the 8x8 grid, whose robot starts bottom-left,
--- sits above the band.
+-- The grid keeps clear of the FIELD_ROWS the runtime covers:
+-- FIELD_ROWS font heights reserve 96 px and draw_layout's
+-- separate margin supplies the rest of the clearance above
+-- the 105 px two-row band, so the 8x8 grid (where Free draw's
+-- robot starts bottom-left) sits clear of it.
 
 function editor_band_h()
   return FIELD_ROWS * gfx.getFont():getHeight()
