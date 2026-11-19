@@ -23,7 +23,7 @@ Output ends with a summary line:
     10 passed, 0 failed, 0 pending
     3 passed, 0 failed, 0 pending
     4 passed, 0 failed, 0 pending
-    19 passed, 0 failed, 0 pending
+    20 passed, 0 failed, 0 pending
     18 passed, 0 failed, 0 pending
     31 passed, 0 failed, 0 pending
     36 passed, 0 failed, 0 pending
@@ -68,7 +68,9 @@ the feature exists. When a feature lands, its
   Enter and keys then change nothing, and the field comes
   back with the program, or empty after a win. Esc during a
   run stops it where it is, the step in flight frozen as it
-  looked, and judges nothing; the next Esc empties the field
+  looked (its time, the track offsets and the partial stroke
+  stay fixed) and lighting no token, and judges nothing; the next
+  Esc empties the field
   and the one after leaves; a held Esc only stops; the run
   after a stop starts clean. A shortcut lives in its own
   program; only the program that completes a picture carries

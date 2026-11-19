@@ -43,7 +43,8 @@ Type commands in the text field at the bottom and press Enter
 to run them. You hear a ping for each command except C. Clearing
 the canvas is silent. The text field goes away while the robot
 moves and comes back with your program when it stops, so you
-can change it and press Enter to run it again. Press Esc while
+can change it and press Enter to run it again. When a picture
+is complete, it comes back empty. Press Esc while
 the robot moves to stop it where it is: the drawing stays and
 your program comes back in the field. Press Esc to empty the
 field and start a new program. Esc on an empty field returns to

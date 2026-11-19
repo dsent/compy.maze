@@ -24,6 +24,46 @@ draw_layout = function()
   return { }
 end
 
+-- The renderer, for what a frame would show: which echo
+-- tokens are lit as executing, and the partial stroke of the
+-- step in flight.
+
+love.graphics = gfx
+local font = {
+  getWidth = function()
+    return 16
+  end
+}
+gfx.getFont = function()
+  return font
+end
+dofile(here .. "/../core_render.lua")
+
+local function lit_tokens()
+  local lit = { }
+  local color = set_echo_color
+  set_echo_color = function(line_idx, col, on)
+    if on then
+      lit[#lit + 1] = line_idx .. ":" .. col
+    end
+  end
+  for i, line in ipairs(echo_lines) do
+    draw_echo_line(line, i, 0)
+  end
+  set_echo_color = color
+  return lit
+end
+
+local function partial_stroke()
+  local seg
+  gfx.line = function(...)
+    seg = { ... }
+  end
+  draw_active_trace()
+  rawset(gfx, "line", nil)
+  return seg
+end
+
 -- Enter `text` in the field and let the run play out.
 
 local function run(text)
@@ -122,16 +162,34 @@ T.it("Esc in the middle of a step leaves it as it looked",
     T.eq(player.anim.kind, "move")
     local t = player.anim.time
     T.eq(0 < t, true)
+    local stroke = partial_stroke()
+    T.eq(stroke ~= nil, true)
     press({ }, "escape")
+    local tracks = { player.track_offset_l, player.track_offset_r }
     tick(20)
     T.eq(player.anim.kind, "move")
     T.eq(player.anim.time, t)
+    T.eq({ player.track_offset_l, player.track_offset_r }, tracks)
+    T.eq(partial_stroke(), stroke)
     T.eq({ player.col, player.row }, { 1, 8 })
     T.eq(trace_count(), 0)
     T.eq(GS.running, false)
     run("2e")
     T.eq({ player.col, player.row, player.dir }, { 3, 8, "E" })
     T.eq(trace_count(), 2)
+  end)
+
+T.it("after a stop, a refused program lights no token as "
+  .. "executing", function()
+    startDrawMode("free")
+    submit("7n")
+    love.update(0.2)
+    love.update(0.2)
+    T.eq(lit_tokens(), { "1:1", "1:2" })
+    press({ }, "escape")
+    submit("eesq")
+    T.eq(GS.invalid.msg, "Unknown command: Q")
+    T.eq(lit_tokens(), { })
   end)
 
 T.it("a held Esc stops the run and does no more", function()

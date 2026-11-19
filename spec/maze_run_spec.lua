@@ -201,8 +201,10 @@ T.it("Esc in the middle of a step leaves the robot as it looked",
     T.eq(player.anim.kind, "move")
     local t = player.anim.time
     press({ }, "escape")
+    local tracks = { player.track_offset_l, player.track_offset_r }
     tick(20)
     T.eq(player.anim.time, t)
+    T.eq({ player.track_offset_l, player.track_offset_r }, tracks)
     T.eq({ player.col, player.row }, { 3, 5 })
     T.eq(GS.failed, nil)
   end)

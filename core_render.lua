@@ -154,10 +154,13 @@ function set_echo_color(line_idx, col, lit)
   gfx.setColor(1, 1, 1, alpha)
 end
 
+-- A step frozen by a stop (stop_run) is not executing: the
+-- robot and its stroke still come from it, but no token is lit.
+
 function draw_echo_line(line, line_idx, y)
   local font = gfx.getFont()
   local a = player.anim
-  local on = a and a.line == line_idx
+  local on = a and not a.frozen and a.line == line_idx
   local x = 0
   for col = 1, #line do
     local ch = line:sub(col, col)

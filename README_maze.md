@@ -108,8 +108,11 @@ Type commands in the text field at the bottom and
 press Enter to run them. You hear a ping for each
 command that runs. The text field goes away while the
 robot moves and comes back with your program when it
-stops. Press Esc while the robot moves to stop it where
-it is; your program comes back in the field.
+stops. After a crash or a missed goal it stays away
+until you press Tab or Esc at the message; after a win
+it comes back empty. Press Esc while the robot moves to
+stop it where it is; your program comes back in the
+field.
 
 The same compass and relative commands are available.
 Both uppercase and lowercase letters work.
@@ -239,7 +242,10 @@ Above the legend, every defined non-empty shortcut
 is shown by its letter. The list grows as you define
 shortcuts and shrinks when you erase them. It spans
 up to 3 lines of up to 8 letters, sorted
-alphabetically. The list persists across levels.
+alphabetically. When you win a level, the list comes
+with you to the next one; a jump to another level
+keeps only the shortcuts the level you left started
+with.
 
 ## Moving Between Levels
 

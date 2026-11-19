@@ -23,10 +23,12 @@ recorded source identity and the previous project is backed up.
    plan and confirm the maze menu.
 7. Open All mazes and press `.` three times to reach Maze 4,
    the first level with the command field (the first three
-   are direct-control). Run one editor command, and confirm
-   the robot, trail, compass, command echo, sound, and timing,
-   and that the field is away while the robot moves and comes
-   back with the command after it. Run `2n2w`; while the robot
+   are direct-control). Run `n`, and confirm the robot, trail,
+   compass, command echo, sound, and timing, and that the field
+   is away while the robot moves and while "Goal not reached"
+   shows. Press Tab and confirm the field is back with `n`.
+   Run `n` again and press Esc at the message: the field is
+   back with `n` again. Run `2n2w`; while the robot
    moves, type `e` and press Enter and confirm nothing
    changes; press Esc and confirm the robot stops where it is
    and the field holds `2n2w`; press Esc and confirm the field
@@ -39,7 +41,8 @@ recorded source identity and the previous project is backed up.
    Back on that level, type `<`, press Enter, and confirm it
    is refused as invalid input. Replace the text with `y=e;.`
    and run it; on Maze 5 run `y` and confirm "Unknown command:
-   Y": a jump carries no shortcut.
+   Y": a jump carries no shortcut. Press Esc to empty the field
+   and Esc again for the maze menu.
 8. At the maze menu, press Shift+Esc, Alt+Esc and
    Alt+Shift+Esc and confirm the menu stays; press Esc and
    confirm Maze leaves for the console.
