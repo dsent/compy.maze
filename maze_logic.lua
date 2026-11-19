@@ -182,7 +182,6 @@ function start_level()
   GS.invalid = nil
   GS.program = nil
   GS.running = false
-  GS.win_macros = nil
   macros = clone_macros(GS.base_macros)
   cur_controls()
 end
@@ -279,7 +278,7 @@ function next_level()
   if #levels < level_index then
     to_menu()
   else
-    GS.base_macros = clone_macros(GS.win_macros or macros)
+    GS.base_macros = clone_macros(macros)
     maze = levels[level_index]
     local saved_q = player.queue
     local saved_r = player.queue_refs
@@ -347,9 +346,6 @@ CMD_HANDLERS = {
 
 function on_win()
   GS.running = false
-  if cur_controls == editor then
-    GS.win_macros = clone_macros(macros)
-  end
   cur_progression()
 end
 

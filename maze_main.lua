@@ -49,9 +49,6 @@ cur_legend = nil
 cur_grid = false
 cur_background = nil
 
--- GS.win_macros holds the winning program's shortcuts while
--- the child stays on a won level; nil until won.
-
 GS = {
   init = false,
   mode = "menu",
@@ -99,29 +96,11 @@ TAB_COMBOS = {
   "ctrl+alt+shift+tab"
 }
 
-function tab_advances()
-  local won = GS.celebrating or GS.won
-  if won then
-    return true
-  end
-  return GS.win_macros ~= nil and not GS.failed
-end
-
-function tab_busy()
-  local off = GS.mode ~= "game" or GS.running
-  if off then
-    return true
-  end
-  local anim = player.anim
-  local active = anim ~= nil and not anim.frozen
-  return active and anim.kind == "win"
-end
-
 function tab_progression()
-  if tab_busy() then
+  if GS.mode ~= "game" or GS.running then
     return
   end
-  if tab_advances() then
+  if GS.celebrating or GS.won then
     next_level()
   elseif GS.failed then
     reset_after_fail()
@@ -144,9 +123,6 @@ end
 
 function to_menu()
   GS.mode = "menu"
-  GS.celebrating = false
-  GS.won = false
-  GS.win_macros = nil
   ctrl_update = nil
   ctrl_pressed = nil
   compy.input.hide()

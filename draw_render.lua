@@ -55,16 +55,12 @@ function legendBlockTop()
   return legend_top(gfx.getFont())
 end
 
-function previewZoneBottom()
-  return tab_hint_top(legendBlockTop()) - tab_hint_gap()
-end
-
 function previewGeometry()
   local font_h = gfx.getFont():getHeight()
   local panel_w = picturePanelWidth()
   local panel_left = gfx.getWidth() - panel_w
   local zone_top = font_h * 3
-  local zone_h = previewZoneBottom() - zone_top
+  local zone_h = legendBlockTop() - font_h - zone_top
   local avail_w = panel_w - 2 * font_h
   local cell = math.min(
     avail_w / CANVAS.cols,
@@ -166,17 +162,6 @@ function drawTaskComplete()
   draw_keycap_banner(DRAW_COMPLETE_PREFIX, "tab", suffix)
 end
 
-function drawTabHint()
-  if not GS.win_macros then
-    return
-  end
-  if GS.won then
-    return
-  end
-  local label = tab_hint_label(GS.level_index == #DRAW_LEVELS)
-  draw_tab_hint(legendBlockTop(), label)
-end
-
 function draw_scene()
   draw_canvas_bg()
   draw_canvas_grid()
@@ -186,6 +171,5 @@ function draw_scene()
   draw_echo()
   drawTargetPanel()
   draw_legend()
-  drawTabHint()
   drawTaskComplete()
 end

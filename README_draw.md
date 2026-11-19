@@ -33,12 +33,9 @@ drawn as one continuous trail. Some need you to travel over a
 line you already drew.
 
 When the trail matches the target, use the shown Tab key for the next
-picture. You can also type another program and press Enter to keep
-playing on the picture: the completion banner goes, a short Tab hint
-appears above the legend, and Tab moves on (or finishes at the last
-picture) whenever the robot is stopped. Extra lines are part of the
-drawing: in default mode, change your program and run it again from a
-fresh canvas; in step-by-step mode, use C to clear and start over.
+picture. Extra lines are part of the drawing: in default mode, change
+your program and run it again from a fresh canvas; in step-by-step
+mode, use C to clear and start over.
 
 Some pictures start with a faint target line on the canvas and
 some start without it. Press the Menu key at any time to turn
@@ -99,14 +96,14 @@ the commands:
 
 Now X runs three steps east, later in the same program. Put the
 shortcut and its uses on one line with semicolons, or on several lines
-with Shift+Enter. In default mode a shortcut lasts only for its run,
-until pressing Tab after completing a picture carries the last winning
-program's shortcuts to the next picture. In step-by-step mode every
-shortcut stays across steps (in Free draw until returning to the menu;
-in Draw the picture across all later steps and all later pictures,
-whether you advance with Tab or jump with `.` or `,`). Shortcuts can
-build on each other. N, E, S, W, F, B, L, R and C are already commands,
-so they cannot name shortcuts.
+with Shift+Enter. In default mode a shortcut lasts for the program it
+is in, and when a program completes a picture, its shortcuts come along
+to the next picture. In step-by-step mode every shortcut stays across
+steps (in Free draw until returning to the menu; in Draw the picture
+across all later steps and all later pictures, whether you advance with
+Tab or jump with `.` or `,`). Shortcuts can build on each other. N, E,
+S, W, F, B, L, R and C are already commands, so they cannot name
+shortcuts.
 
 ### Multiple Lines And Errors
 
@@ -160,11 +157,11 @@ and 2, moves two back, stopping at the first or last picture. A jump to
 another picture opens a fresh copy of it with an empty text field. The
 moves after the jump do not run. In default mode a jump opens the
 picture with the shortcuts the picture you left started with (those
-earlier wins handed on) and drops what the jumping program defined,
-while Tab carries the last winning program's shortcuts. In step-by-step
-mode a jump keeps everything: both Tab and jumps carry all shortcuts you
-have defined. A jump that stays on the same picture, such as , on the
-first one, starts it over.
+earlier wins handed on) and drops what the jumping program defined:
+only a completed picture saves shortcuts. In step-by-step mode a jump
+keeps everything: both Tab and jumps carry all shortcuts you have
+defined. A jump that stays on the same picture, such as , on the first
+one, starts it over.
 
 ## The Screen
 
