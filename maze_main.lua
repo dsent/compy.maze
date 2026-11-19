@@ -190,7 +190,7 @@ end
 function on_escape()
   local typed = (compy.input.get_text() or "") ~= ""
   if typed then
-    compy.input.clear()
+    clear_field()
   elseif plan_holds_keys() then
     plan_reset()
   elseif GS.mode == "game" then

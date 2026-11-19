@@ -101,6 +101,22 @@ function reject_program(text, bad, lines)
   set_prompt(text)
 end
 
+-- Esc empties the field (each program's on_escape). A
+-- refused program's error goes with its text: the prompt says
+-- "Commands:" again and the echo is empty, as at a level's
+-- fresh start, so the screen says nothing about a program
+-- that is gone.
+
+function clear_field()
+  compy.input.clear()
+  if not GS.invalid then
+    return
+  end
+  GS.invalid = nil
+  echo_lines = { }
+  compy.input.configure{ prompt = input_prompt() }
+end
+
 -- Any submit clears the previous run's crash marker; it
 -- otherwise persists through Tab so it stays visible while
 -- the child edits.
