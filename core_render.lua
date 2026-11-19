@@ -263,9 +263,16 @@ function tab_hint_left(font, text)
   return left + math.max(0, (fw - hw) / 2)
 end
 
-function draw_tab_hint(bottom_y)
+function tab_hint_label(is_last)
+  if is_last then
+    return TAB_HINT_FINISH
+  end
+  return TAB_HINT_TEXT
+end
+
+function draw_tab_hint(bottom_y, label)
   local font = gfx.getFont()
-  local text = TAB_HINT_TEXT
+  local text = label or TAB_HINT_TEXT
   local x = tab_hint_left(font, text)
   local y = tab_hint_top(bottom_y)
   local ty = y + (height.tab - font:getHeight()) / 2

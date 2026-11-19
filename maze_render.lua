@@ -366,10 +366,8 @@ function tab_hint_showing()
   if not GS.win_macros then
     return false
   end
-  if GS.celebrating then
-    return false
-  end
-  return not GS.won
+  local modal = GS.celebrating or GS.won or GS.failed
+  return not modal
 end
 
 function hud_top()
@@ -438,7 +436,8 @@ function draw_tab_hint_corner()
   if not tab_hint_showing() then
     return
   end
-  draw_tab_hint(hud_corner_top())
+  local label = tab_hint_label(level_index == #levels)
+  draw_tab_hint(hud_corner_top(), label)
 end
 
 function draw_hud_corner()

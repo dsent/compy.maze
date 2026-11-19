@@ -347,7 +347,9 @@ CMD_HANDLERS = {
 
 function on_win()
   GS.running = false
-  GS.win_macros = clone_macros(macros)
+  if cur_controls == editor then
+    GS.win_macros = clone_macros(macros)
+  end
   cur_progression()
 end
 

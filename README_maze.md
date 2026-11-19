@@ -257,9 +257,10 @@ When you win, what happens next depends on the level:
 - On levels with the command field, you can also type
   another program and press Enter instead of Tab to keep
   playing on the level: the message clears, a short Tab
-  hint appears above the legend, and Tab still takes you
-  to the next level whenever the robot is stopped and no
-  try-again message is up.
+  hint appears above the legend whenever no try-again
+  message is up, and Tab takes you on (or finishes at the
+  last level) once the robot stops and no try-again
+  message is up.
 - Some levels go straight to the next one.
 
 You can also move between levels yourself:

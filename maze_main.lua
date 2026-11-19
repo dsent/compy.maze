@@ -107,9 +107,18 @@ function tab_advances()
   return GS.win_macros ~= nil and not GS.failed
 end
 
+function tab_busy()
+  local off = GS.mode ~= "game" or GS.running
+  if off then
+    return true
+  end
+  local anim = player.anim
+  local active = anim ~= nil and not anim.frozen
+  return active and anim.kind == "win"
+end
+
 function tab_progression()
-  local busy = GS.mode ~= "game" or GS.running
-  if busy then
+  if tab_busy() then
     return
   end
   if tab_advances() then

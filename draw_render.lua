@@ -173,7 +173,8 @@ function drawTabHint()
   if GS.won then
     return
   end
-  draw_tab_hint(legendBlockTop())
+  local label = tab_hint_label(GS.level_index == #DRAW_LEVELS)
+  draw_tab_hint(legendBlockTop(), label)
 end
 
 function draw_scene()

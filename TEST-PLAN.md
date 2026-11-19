@@ -45,12 +45,15 @@ recorded source identity and the previous project is backed up.
    Still on Maze 5, win with `x=n;xe2n2en` and confirm the
    celebration banner shows with no column Tab hint. Type
    `y=e;n` and press Enter: the banner goes and a `[Tab] next`
-   hint appears above the legend. Wait for the miss banner,
-   press Tab once to dismiss it (`n` returns to the field and
-   the hint stays), then press Tab again to advance to Maze 6.
-   Run `y` (refused), then `x` (moves north): only the last
-   winning program's shortcuts carried. Press Esc to empty the
-   field and Esc again for the maze menu.
+   hint appears above the legend while the robot moves, then
+   hides when the miss banner appears. Press Tab once to
+   dismiss the miss banner (`y=e;n` returns to the field and
+   the hint comes back), then press Tab again to advance to
+   Maze 6. Run `y` and confirm "Unknown command: Y", then
+   replace it with `x` and run it (moves north and misses):
+   only the last winning program's shortcuts carried. Press Esc
+   to dismiss the miss banner (`x` returns to the field), Esc
+   to empty the field, and Esc again for the maze menu.
 8. At the maze menu, press Shift+Esc, Alt+Esc and
    Alt+Shift+Esc and confirm the menu stays; press Esc and
    confirm Maze leaves for the console.

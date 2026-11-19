@@ -58,21 +58,51 @@ local font = {
     return lim, lines
   end
 }
+local active_font = font
 gfx.getFont = function()
-  return font
+  return active_font
+end
+gfx.setFont = function(f)
+  active_font = f
+end
+gfx.newFont = function()
+  return {
+    getWidth = function() return 10 end,
+    getHeight = function() return 14 end
+  }
 end
 hud_font = font
-SCALE = 960 / 201.5
 STD_W = 15
 STD_H = 12.5
-width = { tab = 19 * SCALE }
-height = { tab = 12.5 * SCALE }
-Color = setmetatable({ black = 0 }, {
+Color = setmetatable({
+  black = 0,
+  white = 7,
+  red = 1,
+  green = 2,
+  blue = 4,
+  cyan = 6,
+  bright = 8
+}, {
   __index = function()
     return { 0, 0, 0 }
   end
 })
-draw_key = function() end
+robot_back = function() end
+robot_track_l = function() end
+robot_track_r = function() end
+robot_front = function() end
+box_sprite = function() end
+target_sprite = function() end
+utf8 = { char = function() return "" end }
+local base_require = require
+function require(name)
+  if name == "utf8" then
+    return utf8
+  end
+  return base_require(name)
+end
+dofile(here .. "/../keyboard_graphics.lua")
+require = base_require
 local real_grid_opts = grid_opts
 grid_opts = function()
   return { }
@@ -80,26 +110,50 @@ end
 dofile(here .. "/../core_render.lua")
 dofile(here .. "/../maze_render.lua")
 
-local function drawn_tab_hint()
-  local shown
+local function has_text(prints, target)
+  for _, s in ipairs(prints) do
+    if s == target then
+      return true
+    end
+  end
+  return false
+end
+
+local function drawn_frame()
+  ensure_init()
+  local frame = { tab_keys = { }, prints = { } }
   local prev_key = draw_key
   local prev_print = gfx.print
+  active_font = font
   draw_key = function(x, y, name)
     if name == "tab" then
-      shown = { x = x, y = y }
+      frame.tab_keys[#frame.tab_keys + 1] = { x = x, y = y }
     end
+    prev_key(x, y, name)
   end
   gfx.print = function(text, x, y)
-    if shown and text == TAB_HINT_TEXT then
-      shown.text = text
-      shown.tx = x
-      shown.ty = y
+    frame.prints[#frame.prints + 1] = text
+    if text == " next" or text == " finish" then
+      local k = frame.tab_keys[#frame.tab_keys]
+      if k then
+        frame.side_hint = {
+          x = k.x, y = k.y, text = text, tx = x, ty = y
+        }
+      end
     end
   end
-  draw_hud_corner()
+  local ok, err = pcall(love.draw)
   draw_key = prev_key
   rawset(gfx, "print", prev_print)
-  return shown
+  if not ok then
+    error(err)
+  end
+  T.eq(active_font, font)
+  return frame
+end
+
+local function drawn_tab_hint()
+  return drawn_frame().side_hint
 end
 
 -- All mazes, level 4: the first level with the command field.
@@ -312,6 +366,19 @@ T.it("Maze 14: Esc in the pause of a box-goal win stops the run",
     T.eq(level_index, 14)
     T.eq(widget.shown, true)
     T.eq(widget.text, "snwwennseel")
+    press({ }, "tab")
+    T.eq(level_index, 14)
+    T.eq(player.anim, nil)
+    T.eq(GS.filled_count, 0)
+    run("snwwennseel")
+    T.eq(GS.celebrating, true)
+    submit("snwwennseel")
+    tick_until("win")
+    press({ }, "escape")
+    T.eq(player.anim.frozen, true)
+    T.eq(drawn_tab_hint() ~= nil, true)
+    press({ }, "tab")
+    T.eq(level_index, 15)
   end)
 
 T.it("Maze 14: Tab in the pause of a box-goal win waits for it",
@@ -415,7 +482,7 @@ T.it("Maze 5: Enter after a win shows the hint and stays through "
     T.eq(drawn_tab_hint() ~= nil, true)
     run("n")
     T.eq(GS.failed, "miss")
-    T.eq(drawn_tab_hint() ~= nil, true)
+    T.eq(drawn_tab_hint(), nil)
     press({ }, "tab")
     T.eq(level_index, 5)
     T.eq(GS.failed, nil)
@@ -423,9 +490,11 @@ T.it("Maze 5: Enter after a win shows the hint and stays through "
     T.eq(drawn_tab_hint() ~= nil, true)
     run("e")
     T.eq(GS.failed, "crash")
+    T.eq(drawn_tab_hint(), nil)
     press({ }, "tab")
     T.eq(level_index, 5)
     T.eq(GS.failed, nil)
+    T.eq(drawn_tab_hint() ~= nil, true)
     run("q")
     T.eq(GS.invalid.msg, "Unknown command: Q")
     T.eq(drawn_tab_hint() ~= nil, true)
@@ -440,6 +509,7 @@ T.it("Maze 5: Esc at the miss banner dismisses it and keeps the hint",
     run("ne2n2en")
     run("n")
     T.eq(GS.failed, "miss")
+    T.eq(drawn_tab_hint(), nil)
     press({ }, "escape")
     T.eq(GS.failed, nil)
     T.eq(level_index, 5)
@@ -502,13 +572,15 @@ T.it("Maze: Tab hint clears title, 3-line shortcuts, legend and "
       font.getLineHeight = function() return 33 / fh end
       on_level(5)
       run("ne2n2en")
-      run("a=n;c=n;d=n;g=n;h=n;i=n;j=n;k=n;m=n;"
-        .. "o=n;p=n;q=n;t=n;u=n;v=n;x=n;y=n;z=n;n")
+      submit("a=n;c=n;d=n;g=n;h=n;i=n;j=n;k=n;m=n;"
+        .. "o=n;p=n;q=n;t=n;u=n;v=n;x=n;y=n;z=n;2n")
+      tick(1)
+      press({ }, "escape")
       cur_legend = legend
       local h = drawn_tab_hint()
       local hw = width.tab + font:getWidth(h.text)
       local row = text_row(font)
-      T.eq(h.text, TAB_HINT_TEXT)
+      T.eq(h.text, " next")
       T.eq(legend_left(font) <= h.x, true)
       T.eq(h.x + hw <= 1024 - fh, true)
       T.eq(fh * 1.5 <= h.y, true)
@@ -538,6 +610,125 @@ T.it("Maze: Tab hint clears title, 3-line shortcuts, legend and "
         end
       end
     end
+  end)
+
+T.it("Maze 5: love.draw draws only the matching Tab label per state",
+  function()
+    on_level(5)
+    local f0 = drawn_frame()
+    T.eq(#f0.tab_keys, 0)
+    T.eq(has_text(f0.prints, CELEBRATE_PREFIX), false)
+    T.eq(has_text(f0.prints, " next"), false)
+    run("ne2n2en")
+    local f1 = drawn_frame()
+    T.eq(#f1.tab_keys, 1)
+    T.eq(has_text(f1.prints, CELEBRATE_PREFIX), true)
+    T.eq(has_text(f1.prints, CELEBRATE_SUFFIX), true)
+    T.eq(has_text(f1.prints, " next"), false)
+    submit("n")
+    tick(1)
+    local f2 = drawn_frame()
+    T.eq(#f2.tab_keys, 1)
+    T.eq(has_text(f2.prints, CELEBRATE_PREFIX), false)
+    T.eq(has_text(f2.prints, " next"), true)
+    tick(50)
+    local f3 = drawn_frame()
+    T.eq(#f3.tab_keys, 1)
+    T.eq(has_text(f3.prints, FAILED_MISS_PREFIX), true)
+    T.eq(has_text(f3.prints, FAILED_SUFFIX), true)
+    T.eq(has_text(f3.prints, " next"), false)
+    press({ }, "tab")
+    local f4 = drawn_frame()
+    T.eq(#f4.tab_keys, 1)
+    T.eq(has_text(f4.prints, FAILED_MISS_PREFIX), false)
+    T.eq(has_text(f4.prints, " next"), true)
+    run("e")
+    local f5 = drawn_frame()
+    T.eq(#f5.tab_keys, 1)
+    T.eq(has_text(f5.prints, FAILED_CRASH_PREFIX), true)
+    T.eq(has_text(f5.prints, " next"), false)
+    press({ }, "tab")
+    local f6 = drawn_frame()
+    T.eq(#f6.tab_keys, 1)
+    T.eq(has_text(f6.prints, FAILED_CRASH_PREFIX), false)
+    T.eq(has_text(f6.prints, " next"), true)
+  end)
+
+T.it("Drive the robot Maze 1: Tab waits for an active win animation",
+  function()
+    start_track(TRACKS[1])
+    press({ }, "n")
+    press({ }, "n")
+    press({ }, "n")
+    tick_until("win")
+    T.eq(player.anim.kind, "win")
+    love.update(0.2)
+    T.eq(player.anim.kind, "win")
+    press({ }, "tab")
+    T.eq(level_index, 1)
+    T.eq(GS.celebrating, false)
+    T.eq(player.anim.kind, "win")
+    T.eq(player.row, 1)
+    tick(5)
+    T.eq(GS.celebrating, true)
+    press({ }, "tab")
+    T.eq(level_index, 2)
+  end)
+
+T.it("All mazes last level side hint says finish and Tab goes to menu",
+  function()
+    local legend = "  N \nW + E L:↺ R:↻\n  S   F:↑ B:↓\n"
+    on_level(15)
+    level_index = #levels
+    maze = levels[level_index]
+    start_level()
+    cur_legend = legend
+    submit("3e2s2e2nw2n4w3s3n4e2s3w3e2n4w2s"
+      .. "6enws6wse3n4eses4wsn3e2n4w2swsen3e2senen4w3e2n4w2s")
+    tick(1000)
+    T.eq(GS.celebrating, true)
+    local f1 = drawn_frame()
+    T.eq(#f1.tab_keys, 1)
+    T.eq(has_text(f1.prints, " finish"), false)
+    run("n")
+    press({ }, "tab")
+    local f2 = drawn_frame()
+    T.eq(#f2.tab_keys, 1)
+    T.eq(has_text(f2.prints, " finish"), true)
+    T.eq(has_text(f2.prints, " next"), false)
+    local h = f2.side_hint
+    local hw = width.tab + font:getWidth(h.text)
+    T.eq(legend_left(font) <= h.x, true)
+    T.eq(h.x + hw <= 1024 - font:getHeight(), true)
+    press({ }, "tab")
+    T.eq(GS.mode, "menu")
+  end)
+
+local function release(key)
+  local hook = compy.input.hooks.keyreleased
+  if hook then
+    hook(key)
+  end
+end
+
+T.it("Drive the robot Maze 1: shortcut recorded at celebration "
+  .. "carries to Maze 2", function()
+    start_track(TRACKS[1])
+    press({ }, "n")
+    press({ }, "n")
+    press({ }, "n")
+    tick(10)
+    T.eq(GS.celebrating, true)
+    press({ "shift" }, "x")
+    press({ "shift" }, "n")
+    release("lshift")
+    T.eq(macros.X, "N")
+    press({ }, "tab")
+    T.eq(level_index, 2)
+    T.eq({ player.col, player.row }, { 1, 4 })
+    press({ }, "x")
+    tick(5)
+    T.eq({ player.col, player.row }, { 1, 3 })
   end)
 
 T.run()
