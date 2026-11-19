@@ -19,9 +19,10 @@ maze. Press a number to begin:
   3 — All mazes
 
 You can return to this menu while playing by
-pressing Esc. If you are typing a command or a plan, the
-first Esc empties it and the next one returns. Esc at this
-menu leaves Maze.
+pressing Esc. If the robot is running your program, the
+first Esc stops it. If you are typing a command or a
+plan, the next Esc empties it and the one after returns.
+Esc at this menu leaves Maze.
 
 ## Controls
 
@@ -97,13 +98,18 @@ turns red and the keys after it go dark. The robot
 returns to the start, but your plan stays. Fix it
 and press Enter to try again.
 
-A plan holds up to 20 keys.
+A plan holds up to 20 keys. Press Esc while the robot
+follows it to stop it: the robot returns to the start
+and your plan stays.
 
 ### Editor Mode
 
 Type commands in the text field at the bottom and
 press Enter to run them. You hear a ping for each
-command that runs.
+command that runs. The text field goes away while the
+robot moves and comes back with your program when it
+stops. Press Esc while the robot moves to stop it where
+it is; your program comes back in the field.
 
 The same compass and relative commands are available.
 Both uppercase and lowercase letters work.
@@ -257,18 +263,19 @@ keeps none of them.
 
 ## Leaving
 
-  Esc       — empty the command field or the plan; from
-              an empty one, or a level with neither,
-              return to the maze menu; at the menu,
-              leave Maze for the console
+  Esc       — stop the robot; then empty the command
+              field or the plan; from an empty one, or a
+              level with neither, return to the maze
+              menu; at the menu, leave Maze for the
+              console
   Ctrl+Q    — leave Maze for the console at once
 
-Esc works while editing and while planning: the first
-press empties what you typed, and the next one returns
-to the menu. While the robot is running a plan, Esc
-returns to the menu at once. Each Esc goes back one step,
-so holding it down stops at the menu. Ctrl+Q leaves Maze
-from anywhere.
+While the robot runs your program or your plan, the
+first Esc stops it. While you edit or plan, Esc empties
+what you typed, and the next one returns to the menu.
+Each Esc goes back one step, so holding it down stops
+the robot and goes no further. Ctrl+Q leaves Maze from
+anywhere.
 
 ## Grid
 

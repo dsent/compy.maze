@@ -81,6 +81,7 @@ function finish_run()
   end
   GS.won = true
   ctrl_update = nil
+  open_editor("")
   sfx.win()
 end
 
@@ -343,23 +344,26 @@ function SYSTEM_KEYS.menu()
   sfx.sword()
 end
 
--- Esc empties the command field when it holds text, so the
--- next step starts on a clean line: Esc, C, Enter. From an
--- empty field Esc steps back to this program's menu, as the
--- editor first drops the edit and then leaves the file. The
--- menu is the top level, where Esc leaves Draw for the
--- console, as Ctrl+Q does from anywhere.
+-- Esc while the robot moves stops the run and brings the
+-- field back with the program (stop_run). Then it empties the
+-- command field when it holds text, so the next step starts
+-- on a clean line. From an empty field Esc steps back to this
+-- program's menu, as the editor first drops the edit and then
+-- leaves the file. The menu is the top level, where Esc
+-- leaves Draw for the console, as Ctrl+Q does from anywhere.
 --
 -- One shortcut decides every step. A combo is offered the key
--- before the widget is, which is what makes it reach Free
--- draw at all: that mode keeps its field shown the whole
--- time. It takes only a bare Esc, and only its press: a chord
--- with Esc is no command here, and a held Esc that emptied
--- the field or reached the menu goes no further.
+-- before the widget is, so a shown widget cannot hide the
+-- gesture. It takes only a bare Esc, and only its press: a
+-- chord with Esc is no command here, and a held Esc that
+-- stopped a run, emptied the field or reached the menu goes
+-- no further.
 
 function on_escape()
   local typed = (compy.input.get_text() or "") ~= ""
-  if typed then
+  if GS.running then
+    stop_run()
+  elseif typed then
     clear_field()
   elseif GS.screen == "game" then
     toDrawMenu()

@@ -140,7 +140,12 @@ end
 
 -- Update
 
+-- A frozen animation (stop_run) neither advances nor ends.
+
 function advance_anim(dt)
+  if player.anim.frozen then
+    return
+  end
   player.anim.time = player.anim.time + dt
   if player.anim.kind == "win"
        and player.anim.goal
@@ -175,7 +180,7 @@ end
 
 function update_track_offsets(dt)
   local fn = TRACK_UPDATE[player.anim.kind]
-  if fn then
+  if fn and not player.anim.frozen then
     fn(player.anim, dt)
   end
 end

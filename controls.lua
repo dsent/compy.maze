@@ -29,9 +29,16 @@ function portal()
   next_level()
 end
 
+-- A celebration waits for Tab. On an editor level the field,
+-- away since the run began, comes back empty, as after any
+-- win.
+
 function celebrate()
   ctrl_update = nil
   GS.celebrating = true
+  if cur_controls == editor then
+    open_editor("")
+  end
 end
 
 function continue()

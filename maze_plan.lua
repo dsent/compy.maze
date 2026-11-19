@@ -238,6 +238,15 @@ end
 -- reset the maze. The buffer is preserved so the child
 -- can read which step failed, edit, and retry.
 
+-- Esc during a plan run stops it: the robot goes home and the
+-- whole plan is pending again, with no step shown as run and
+-- no crash marked -- green is for steps a completed run took.
+
+function plan_stop()
+  plan_miss_reset()
+  plan_clear_marks()
+end
+
 function plan_after_crash()
   local mark = GS.crash
   GS.plan.crash_at = mark and mark.line

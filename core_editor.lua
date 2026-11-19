@@ -117,6 +117,30 @@ function clear_field()
   compy.input.configure{ prompt = input_prompt() }
 end
 
+-- Esc while the robot moves (each program's on_escape) stops
+-- the run: nothing more runs, and nothing is judged -- no
+-- win, miss or crash. The step in flight is frozen as it
+-- looked: the robot half way, its half stroke, a box half
+-- pushed, until the next run or level start resets them; no
+-- end-of-step code runs for it. A goal that had begun to
+-- shrink for a win is whole again. The field comes back
+-- holding the program, as at the end of a run.
+
+function stop_run()
+  local a = player.anim
+  if a and a.goal then
+    a.goal.radius = 1
+    player.anim = nil
+  elseif a then
+    a.frozen = true
+  end
+  player.queue = { }
+  player.queue_refs = { }
+  GS.running = false
+  GS.crash = nil
+  open_editor(GS.program or "")
+end
+
 -- Any submit clears the previous run's crash marker; it
 -- otherwise persists through Tab so it stays visible while
 -- the child edits.
@@ -129,6 +153,11 @@ end
 -- run before it left: a win, a miss or a crash drops
 -- ctrl_update to hold the screen, and Enter in place of Tab
 -- arms it again.
+--
+-- The field goes while the robot moves: no typing, Enter or
+-- recall reaches it, and the keys go to the program, which
+-- answers only Esc and the Menu key then. The end of the run
+-- brings it back (rearm_input), and so does a stop.
 
 function start_program(text)
   GS.failed = nil
@@ -144,6 +173,7 @@ function start_program(text)
   end
   GS.invalid = nil
   GS.program = text
+  compy.input.hide()
   ctrl_update = rearm_input
   before_run()
   echo_lines = lines
@@ -159,8 +189,9 @@ end
 -- editor's: has the queue drained? Nothing raises an event
 -- for an animation ending.
 --
--- The widget comes back here because this is the moment the
--- run ends -- once, not once per frame. Which runs get it
+-- The widget comes back here, hidden since the run began,
+-- because this is the moment the run ends -- once, not once
+-- per frame. Which runs get it
 -- back is finish_run's decision, read from what it leaves
 -- behind: a win starts an animation, a miss drops
 -- ctrl_update, and a crash does neither -- that is the case

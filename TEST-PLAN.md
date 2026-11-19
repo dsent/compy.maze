@@ -12,6 +12,8 @@ recorded source identity and the previous project is backed up.
 4. Return to the menu with Esc. Open Drive the robot again and
    hold Esc for two seconds: the maze menu shows and stays.
 5. Open Plan a path, enter a short plan, run it, and retry it.
+   Run it again and press Esc while the robot moves: the robot
+   returns to the start and the plan stays.
 6. Return to the menu with Esc and open Plan a path again, so
    the plan can be edited (a won level locks it). Enter keys
    without pressing Enter, press Shift+Esc and confirm the
@@ -22,7 +24,14 @@ recorded source identity and the previous project is backed up.
 7. Open All mazes and press `.` three times to reach Maze 4,
    the first level with the command field (the first three
    are direct-control). Run one editor command, and confirm
-   the robot, trail, compass, command echo, sound, and timing.
+   the robot, trail, compass, command echo, sound, and timing,
+   and that the field is away while the robot moves and comes
+   back with the command after it. Run `2n2w`; while the robot
+   moves, type `e` and press Enter and confirm nothing
+   changes; press Esc and confirm the robot stops where it is
+   and the field holds `2n2w`; press Esc and confirm the field
+   empties; press Esc and confirm the maze menu; return to
+   Maze 4.
    Type a command without pressing Enter, press Shift+Esc,
    Alt+Esc and Alt+Shift+Esc, and confirm the text and the
    level stay. Press Esc and confirm the field empties and the
@@ -40,7 +49,7 @@ recorded source identity and the previous project is backed up.
 1. Launch Draw and confirm the menu lists Free draw first and
    Draw the picture second.
 2. Open Free draw. Run `3e` and confirm three steps east and
-   that the field is empty while the robot moves and holds `3e`
+   that the field is away while the robot moves and holds `3e`
    again when it stops. Replace the field's text with `2n` and
    run it, and confirm only two steps north from the start cell
    show. Replace the text with `x=3e` and run it, then replace
@@ -52,7 +61,12 @@ recorded source identity and the previous project is backed up.
    the trail and robot stay. Type `EE`, press Shift+Esc,
    Alt+Esc, then Alt+Shift+Esc, and confirm the text stays.
    Hold Esc for two seconds and confirm the field empties and
-   Free draw stays.
+   Free draw stays. Run `7n7s7n7s`; while the robot moves, type
+   `e` and press Enter and confirm nothing changes; press Esc
+   and confirm the robot stops where it is, the drawing stays
+   and the field holds `7n7s7n7s`; press Esc and confirm the
+   field empties; press Esc and confirm the draw menu; open
+   Free draw again.
 3. Confirm Free draw has the original 8x8 canvas, right-side
    compass, bottom-left start, and soft edge.
 4. Type `<` in Free draw, press Enter, and confirm it is
@@ -64,9 +78,10 @@ recorded source identity and the previous project is backed up.
 6. Toggle the faint field hint off and on with the Menu key.
    Click on the canvas and confirm the hint stays as it is.
 7. Complete Line with `5E`; confirm the completion stripe shows
-   the Tab key glyph. Press Enter in place of Tab: the program
-   runs again from a clean start and the stripe comes back.
-   Replace the text with `X=5E;X` and run it, then with `Q`
+   the Tab key glyph and that the field is back and empty. Type
+   `5E` and press Enter in place of Tab: the program runs again
+   from a clean start and the stripe comes back. Type `X=5E;X`
+   and run it, then type `Q`
    (refused), then press Tab, and confirm `X` runs on Picture
    2/20; go back with `,`.
 8. Complete Line again with `5E`, then press Tab. Confirm

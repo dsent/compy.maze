@@ -72,6 +72,8 @@ end
 
 -- Tab moves the level on: forward after a win, back to the
 -- start after a failed run, and a plain restart otherwise.
+-- While a program or a plan runs it does nothing: Esc stops
+-- a run.
 --
 -- ignore_repeat, or a held Tab walks through the levels.
 -- side_run, so the press travels on afterwards and still
@@ -95,7 +97,7 @@ TAB_COMBOS = {
 }
 
 function tab_progression()
-  if GS.mode ~= "game" then
+  if GS.mode ~= "game" or GS.running then
     return
   end
   if GS.celebrating or GS.won then
@@ -174,8 +176,11 @@ function SYSTEM_KEYS.menu()
   sfx.sword()
 end
 
--- Esc empties the command field when it holds text, and a
--- plan that holds keys; from an empty one, or a level with
+-- Esc while the robot runs a program stops it and brings the
+-- field back with the program (stop_run); while it runs a
+-- plan, it stops the plan as a missed run ends (plan_stop).
+-- Then it empties the command field when it holds text, and
+-- a plan that holds keys; from an empty one, or a level with
 -- neither, it steps back to the track menu, as the editor
 -- first drops the edit and then leaves the file. The menu is
 -- the top level, where Esc leaves the game for the console,
@@ -185,11 +190,16 @@ end
 -- before the command widget is, so a shown widget cannot hide
 -- the gesture. It takes only a bare Esc, and only its press:
 -- a chord with Esc is no command here, and a held Esc that
--- emptied the field or reached the menu goes no further.
+-- stopped a run, emptied the field or reached the menu goes
+-- no further.
 
 function on_escape()
   local typed = (compy.input.get_text() or "") ~= ""
-  if typed then
+  if GS.running and cur_controls == plan then
+    plan_stop()
+  elseif GS.running then
+    stop_run()
+  elseif typed then
     clear_field()
   elseif plan_holds_keys() then
     plan_reset()

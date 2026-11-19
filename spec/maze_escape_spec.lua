@@ -185,13 +185,6 @@ T.it("shift+escape keeps the plan and the level", function()
   T.eq(GS.mode, "game")
 end)
 
-T.it("Esc during a run goes to the menu", function()
-  in_plan({ "N", "E" }, true)
-  press({ }, "escape")
-  T.eq(GS.mode, "menu")
-  GS.running = false
-end)
-
 for _, mods in ipairs(ESC_CHORDS) do
   local name = table.concat(mods, "+") .. "+escape"
   T.it(name .. " keeps the draft and the level", function()
