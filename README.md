@@ -13,7 +13,6 @@ copies the shared core plus each program's own files into two
 separate project folders.
 
     .compy/build <out-dir>   # -> <out-dir>/maze and /draw
-    ./verify.sh              # headless build check (no device)
 
 The host build invokes `.compy/build` as
 `cd <repo> && .compy/build <out-dir>`. Which programs ship is
@@ -21,8 +20,7 @@ governed by an external manifest (two entries, `maze` and
 `draw`, sharing this repo) — it lives in the build system, not
 here.
 
-See **BUILD.md** for the file layout and the full procedure,
-and **spec/** for the headless command and level-data tests. The
-child-facing readme for each program is `README_maze.md` /
-`README_draw.md`; the build emits each as that folder's
+See **BUILD.md** for the file layout and the full procedure.
+The child-facing readme for each program is `README_maze.md`
+/ `README_draw.md`; the build emits each as that folder's
 `README.md`.
