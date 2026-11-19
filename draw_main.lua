@@ -1,8 +1,8 @@
 -- draw_main.lua
 
 -- Draw contains two mini-games on the shared command core:
--- the free canvas and 20 picture tasks. Each run draws its
--- whole program from a clean start, as maze runs its level.
+-- the free canvas and 20 picture tasks, in default whole-run
+-- mode or step-by-step mode.
 
 require("core_constants")
 require("draw_constants")
@@ -35,6 +35,7 @@ GS = {
   hint = false,
   won = false,
   running = false,
+  step_by_step = false,
   base_macros = { }
 }
 
@@ -59,16 +60,18 @@ function blocked(tc, tr)
   return tc < 1 or GRID.cols < tc or tr < 1 or GRID.rows < tr
 end
 
--- A validated program runs from a clean start, as maze
--- resets its level: the drawing goes, the robot is back on
--- its start cell and heading, and nothing of an earlier run
--- is queued. The field keeps the program, so the child edits
--- it and runs it again.
+-- In default mode a validated program runs from a clean start
+-- (drawing cleared, robot home). In step-by-step mode it runs
+-- on top of the canvas, clearing only any frozen stop anim.
 
 function before_run()
+  GS.won = false
+  if GS.step_by_step then
+    player.anim = nil
+    return
+  end
   local col, row, dir = activeStart()
   player_reset(col, row, dir)
-  GS.won = false
 end
 
 function after_step()
@@ -113,14 +116,21 @@ function takeDrawLevelRepeats(cmd)
   return count
 end
 
--- Only a win saves shortcuts, as in maze: a jump opens the
--- destination with the base the picture it left started
--- with, nothing the jumping program defined.
+-- In default mode only a win saves shortcuts; a jump opens
+-- the target with the left picture's base. Step-by-step mode
+-- carries all accumulated shortcuts across every jump.
+
+function carryStepMacros()
+  if GS.step_by_step then
+    GS.base_macros = clone_macros(macros)
+  end
+end
 
 function jumpPictureLevel(delta)
   if GS.draw_mode ~= "picture" then
     return
   end
+  carryStepMacros()
   local index = clampDrawLevelIndex(GS.level_index + delta)
   GS.level_index = index
   startPictureLevel()
@@ -251,6 +261,7 @@ end
 
 function nextPictureLevel()
   GS.base_macros = clone_macros(GS.win_macros or macros)
+  carryStepMacros()
   GS.level_index = GS.level_index + 1
   if #DRAW_LEVELS < GS.level_index then
     toDrawMenu()

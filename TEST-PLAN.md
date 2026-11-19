@@ -62,8 +62,9 @@ recorded source identity and the previous project is backed up.
 
 ## B. Draw Acceptance
 
-1. Launch Draw and confirm the menu lists Free draw first and
-   Draw the picture second.
+1. Launch Draw and confirm the menu lists `1.  Free draw` first,
+   `2.  Draw the picture` second, and `S  Step by step: off` below
+   them; confirm another key (such as `3`) leaves the menu unchanged.
 2. Open Free draw. Run `3e` and confirm three steps east and
    that the field is away while the robot moves and holds `3e`
    again when it stops. Replace the field's text with `2n` and
@@ -135,3 +136,26 @@ recorded source identity and the previous project is backed up.
     confirm Draw leaves for the console.
 17. Launch Draw again, open Free draw, leave through Ctrl+Q and
     confirm the console is usable.
+18. Return to the Draw menu, press `S`, and confirm `S  Step by
+    step: on` appears. Open Free draw and confirm an empty field
+    with `Next step:`; press `s` once in the field to verify `s` is
+    not swallowed. Clear, run `x=2e;x`, confirm field returns empty
+    with `Next step:`; press Up to confirm `x=2e;x` recalls. Run
+    `n` and confirm it starts from step 1's end cell keeping both
+    trails; run `x` to confirm shortcuts persist; run `c` to clear
+    canvas and return robot to start while `x` still works. Submit
+    `q` (refused), confirm text and drawing stay and Esc restores
+    `Next step:`. Submit `4n`, press Esc mid-run to confirm frozen
+    half step and field holding `4n` with `Next step:`, then run
+    `e` cleanly. Esc back to the menu, confirm `S  Step by step: on`
+    holds, re-open Free draw and confirm fresh start and `Unknown
+    command: X` for `x`.
+19. With `S  Step by step: on`, open Draw the picture (`Next
+    step:`). Complete Picture 1 across two steps (`x=2e;x`, then
+    `3e`) and confirm the completion banner; run `y=n;y` on top and
+    confirm banner clears and `[Tab] next` appears in the column;
+    press Tab and confirm both `x` and `y` work on Picture 2.
+    Define `z=n`, jump forward with `.` and back with `,` and
+    confirm `x`, `y` and `z` hold across jumps. Return to the menu,
+    press `S` to turn `Step by step: off`, open Free draw and
+    confirm the `Commands:` prompt returns.

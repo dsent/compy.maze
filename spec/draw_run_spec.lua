@@ -1,9 +1,9 @@
--- Runs in draw: every run draws its whole program from a clean
--- start, as maze runs its level, and the field keeps the
--- program. Shortcuts follow maze's rule: a run starts from the
--- picture's base, the program that completes a picture carries
--- its shortcuts to the next one, and Free draw has none to
--- carry. draw_main.lua runs here against the stand-in in
+-- Runs in draw: in default mode every run draws its whole
+-- program from a clean start and keeps it in the field, with
+-- winning shortcuts carrying on Tab. Step-by-step mode
+-- (toggled on the menu) draws each step on top of the last,
+-- empties the field after a step, and keeps all shortcuts
+-- across steps, jumps and Tab. draw_main.lua runs here against
 -- input_standin.lua, driven as a child drives it: a program
 -- goes in through the field's Enter, the run goes on in
 -- love.update, and Tab moves on.
@@ -595,6 +595,271 @@ T.it("last picture side hint says finish and Tab goes to the menu",
     T.eq(h.x + hw <= 1024 - font:getHeight(), true)
     press({ }, "tab")
     T.eq(GS.screen, "menu")
+  end)
+
+-- Step-by-step mode ------------------------------------------
+
+local function drawn_menu()
+  local lines = { }
+  local prev = gfx.printf
+  gfx.printf = function(text, _, y)
+    lines[#lines + 1] = { text = text, y = y }
+  end
+  local ok, err = pcall(love.draw)
+  rawset(gfx, "printf", prev)
+  if not ok then
+    error(err)
+  end
+  return lines
+end
+
+local function menu_line_y(lines, text)
+  for _, item in ipairs(lines) do
+    if item.text == text then
+      return item.y
+    end
+  end
+end
+
+local function step_mode_on(mode)
+  GS.step_by_step = false
+  toDrawMenu()
+  press({ }, "s")
+  startDrawMode(mode)
+end
+
+T.it("menu starts with step-by-step off, S toggles it, "
+  .. "and guards stay armed", function()
+    GS.step_by_step = false
+    toDrawMenu()
+    local m0 = drawn_menu()
+    local y1 = menu_line_y(m0, "1.  Free draw")
+    local y2 = menu_line_y(m0, "2.  Draw the picture")
+    local y_off = menu_line_y(m0, "S  Step by step: off")
+    T.eq(y1 < y2, true)
+    T.eq(y2 < y_off, true)
+    press({ }, "3")
+    press({ }, "a")
+    T.eq(GS.screen, "menu")
+    T.eq(GS.step_by_step, false)
+    press({ }, "s")
+    T.eq(GS.step_by_step, true)
+    T.eq(compy.input.shortcuts.textinput["1"] ~= nil, true)
+    T.eq(compy.input.shortcuts.textinput["2"] ~= nil, true)
+    T.eq(compy.input.shortcuts.textinput["s"], nil)
+    local m1 = drawn_menu()
+    T.eq(menu_line_y(m1, "S  Step by step: on"), y_off)
+    press({ }, "S")
+    T.eq(GS.step_by_step, false)
+    local m2 = drawn_menu()
+    T.eq(menu_line_y(m2, "S  Step by step: off"), y_off)
+    GS.step_by_step = false
+  end)
+
+T.it("step-by-step holds across games until toggled off",
+  function()
+    step_mode_on("free")
+    T.eq(GS.step_by_step, true)
+    press({ }, "escape")
+    T.eq(GS.screen, "menu")
+    T.eq(GS.step_by_step, true)
+    press({ }, "2")
+    T.eq(GS.screen, "game")
+    T.eq(GS.draw_mode, "picture")
+    T.eq(GS.step_by_step, true)
+    press({ }, "escape")
+    T.eq(GS.screen, "menu")
+    press({ }, "s")
+    press({ }, "1")
+    T.eq(GS.step_by_step, false)
+    T.eq(widget.flags.prompt, "Commands:")
+    GS.step_by_step = false
+  end)
+
+T.it("Free draw step-by-step accumulates position, traces "
+  .. "and shortcuts", function()
+    step_mode_on("free")
+    T.eq(widget.flags.prompt, "Next step:")
+    T.eq(widget.text, "")
+    run("x=2e;x")
+    T.eq({ player.col, player.row, player.dir }, { 3, 8, "E" })
+    T.eq(trace_count(), 2)
+    T.eq(widget.shown, true)
+    T.eq(widget.text, "")
+    T.eq(widget.flags.prompt, "Next step:")
+    widget.flags.on_limit_reached("up")
+    T.eq(widget.text, "x=2e;x")
+    run("n")
+    T.eq({ player.col, player.row, player.dir }, { 3, 7, "N" })
+    T.eq(trace_count(), 3)
+    run("x")
+    T.eq({ player.col, player.row, player.dir }, { 5, 7, "E" })
+    T.eq(trace_count(), 5)
+    run("c")
+    T.eq({ player.col, player.row, player.dir }, { 1, 8, "N" })
+    T.eq(trace_count(), 0)
+    run("x")
+    T.eq({ player.col, player.row, player.dir }, { 3, 8, "E" })
+    T.eq(trace_count(), 2)
+    press({ }, "escape")
+    T.eq(GS.screen, "menu")
+    press({ }, "1")
+    T.eq({ player.col, player.row, player.dir }, { 1, 8, "N" })
+    T.eq(trace_count(), 0)
+    run("x")
+    T.eq(GS.invalid.msg, "Unknown command: X")
+    GS.step_by_step = false
+  end)
+
+T.it("step-by-step Esc stops a step cleanly and refused "
+  .. "steps change nothing", function()
+    step_mode_on("free")
+    run("x=2e;x")
+    submit("2n")
+    tick(1)
+    T.eq(widget.shown, false)
+    tick(100)
+    T.eq(widget.shown, true)
+    T.eq(widget.text, "")
+    submit("3n")
+    love.update(0.2)
+    love.update(0.2)
+    T.eq(player.anim.kind, "move")
+    local col, row = player.col, player.row
+    local dir, traces = player.dir, trace_count()
+    press({ }, "escape")
+    T.eq(GS.running, false)
+    T.eq(player.anim.frozen, true)
+    T.eq(widget.shown, true)
+    T.eq(widget.text, "3n")
+    T.eq(widget.flags.prompt, "Next step:")
+    run("e")
+    T.eq(player.anim, nil)
+    T.eq({ player.col, player.row, player.dir },
+      { col + 1, row, "E" })
+    T.eq(trace_count(), traces + 1)
+    submit("q")
+    T.eq(GS.invalid.msg, "Unknown command: Q")
+    T.eq(widget.text, "q")
+    T.eq(widget.flags.prompt, "Unknown command: Q")
+    T.eq({ player.col, player.row, player.dir },
+      { col + 1, row, "E" })
+    T.eq(trace_count(), traces + 1)
+    press({ }, "escape")
+    T.eq(widget.text, "")
+    T.eq(widget.flags.prompt, "Next step:")
+    T.eq(GS.screen, "game")
+    run("x")
+    T.eq(GS.invalid, nil)
+    T.eq({ player.col, player.row }, { col + 3, row })
+    press({ }, "escape")
+    T.eq(GS.screen, "menu")
+    GS.step_by_step = false
+  end)
+
+T.it("step-by-step keeps text after stop through the "
+  .. "three-Esc sequence", function()
+    step_mode_on("free")
+    submit("4n")
+    love.update(0.2)
+    press({ }, "escape")
+    T.eq(widget.text, "4n")
+    T.eq(widget.flags.prompt, "Next step:")
+    press({ }, "escape")
+    T.eq(widget.text, "")
+    T.eq(widget.flags.prompt, "Next step:")
+    T.eq(GS.screen, "game")
+    press({ }, "escape")
+    T.eq(GS.screen, "menu")
+    GS.step_by_step = false
+  end)
+
+T.it("Draw the picture step-by-step completes across steps "
+  .. "and carries all macros on Tab and jump", function()
+    step_mode_on("picture")
+    T.eq(widget.flags.prompt, "Next step:")
+    run("x=2e;x")
+    T.eq(GS.won, false)
+    run("y=3e;y")
+    T.eq(GS.won, true)
+    T.eq(widget.text, "")
+    T.eq(widget.flags.prompt, "Next step:")
+    T.eq(has_text(drawn_frame().prints, DRAW_COMPLETE_PREFIX),
+      true)
+    press({ }, "tab")
+    T.eq(GS.level_index, 2)
+    run("z=n")
+    run(".")
+    T.eq(GS.level_index, 3)
+    run("x")
+    T.eq(GS.invalid, nil)
+    run("y")
+    T.eq(GS.invalid, nil)
+    run("z")
+    T.eq(GS.invalid, nil)
+    run(",")
+    T.eq(GS.level_index, 2)
+    run("z")
+    T.eq(GS.invalid, nil)
+    GS.step_by_step = false
+  end)
+
+T.it("post-win stray step drops banner, keeps side hint, "
+  .. "and Tab carries all step macros", function()
+    step_mode_on("picture")
+    run("x=2e;x")
+    run("3e")
+    T.eq(GS.won, true)
+    run("y=n;y")
+    T.eq(GS.won, false)
+    T.eq(widget.text, "")
+    T.eq(widget.flags.prompt, "Next step:")
+    local f = drawn_frame()
+    T.eq(has_text(f.prints, DRAW_COMPLETE_PREFIX), false)
+    T.eq(has_text(f.prints, " next"), true)
+    press({ }, "tab")
+    T.eq(GS.level_index, 2)
+    run("x")
+    T.eq(GS.invalid, nil)
+    run("y")
+    T.eq(GS.invalid, nil)
+    press({ }, "escape")
+    press({ }, "2")
+    run("x")
+    T.eq(GS.invalid.msg, "Unknown command: X")
+    GS.step_by_step = false
+  end)
+
+T.it("last picture step-by-step hint says finish and Tab "
+  .. "goes to the menu keeping step mode", function()
+    step_mode_on("picture")
+    GS.level_index = #DRAW_LEVELS
+    startPictureLevel()
+    run(DRAW_LEVELS[#DRAW_LEVELS].route)
+    local f1 = drawn_frame()
+    T.eq(has_text(f1.prints, DRAW_COMPLETE_FINAL_SUFFIX), true)
+    run("s")
+    local f2 = drawn_frame()
+    T.eq(GS.won, false)
+    T.eq(has_text(f2.prints, " finish"), true)
+    T.eq(has_text(f2.prints, " next"), false)
+    press({ }, "tab")
+    T.eq(GS.screen, "menu")
+    T.eq(GS.step_by_step, true)
+    GS.step_by_step = false
+  end)
+
+T.it("default mode keeps Commands: prompt and resets "
+  .. "shortcuts between runs", function()
+    GS.step_by_step = false
+    toDrawMenu()
+    startDrawMode("picture")
+    T.eq(widget.flags.prompt, "Commands:")
+    run("x=e;x")
+    T.eq(widget.text, "x=e;x")
+    T.eq(widget.flags.prompt, "Commands:")
+    run("x")
+    T.eq(GS.invalid.msg, "Unknown command: X")
   end)
 
 T.run()
