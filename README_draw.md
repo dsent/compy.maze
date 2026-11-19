@@ -16,10 +16,8 @@ off when Draw launches and keeps its setting across games until you
 press S on the menu again.
 
 Free draw is the open canvas. Draw the picture is a series of 20 tasks
-that get harder in steps: counting single strokes, then closed shapes,
-then a repeating step pattern, then the first pictures that send you
-back over a line you already drew, then sloped sides built from steps,
-and finally whole objects. It ends with a dog.
+ordered by difficulty, from single strokes to shapes, patterns, and
+whole objects. It starts with a line and ends with a cat.
 
 ## Goal
 
