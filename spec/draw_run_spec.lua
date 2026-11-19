@@ -649,10 +649,28 @@ T.it("menu starts with step-by-step off, S toggles it, "
     T.eq(compy.input.shortcuts.textinput["s"], nil)
     local m1 = drawn_menu()
     T.eq(menu_line_y(m1, "S  Step by step: on"), y_off)
-    press({ }, "S")
+    press({ }, "s", true)
+    T.eq(GS.step_by_step, true)
+    for _, chord in ipairs({
+      { "ctrl" },
+      { "alt" },
+      { "ctrl", "shift" },
+      { "ctrl", "alt" }
+    }) do
+      press(chord, "s")
+      T.eq(GS.step_by_step, true)
+    end
+    press({ "shift" }, "s", true)
+    T.eq(GS.step_by_step, true)
+    press({ "shift" }, "s")
     T.eq(GS.step_by_step, false)
     local m2 = drawn_menu()
     T.eq(menu_line_y(m2, "S  Step by step: off"), y_off)
+    startDrawMode("free")
+    press({ }, "s")
+    T.eq(GS.step_by_step, false)
+    press({ "shift" }, "s")
+    T.eq(GS.step_by_step, false)
     GS.step_by_step = false
   end)
 
@@ -846,6 +864,95 @@ T.it("last picture step-by-step hint says finish and Tab "
     press({ }, "tab")
     T.eq(GS.screen, "menu")
     T.eq(GS.step_by_step, true)
+    GS.step_by_step = false
+  end)
+
+T.it("post-win non-drawing step celebrates only on a fresh "
+  .. "match and keeps the side hint", function()
+    local wins = 0
+    local prev_win = sfx.win
+    sfx.win = function()
+      wins = wins + 1
+    end
+    step_mode_on("picture")
+    run("5e")
+    T.eq(wins, 1)
+    T.eq(GS.won, true)
+    local f1 = drawn_frame()
+    T.eq(has_text(f1.prints, DRAW_COMPLETE_PREFIX), true)
+    T.eq(has_text(f1.prints, " next"), false)
+    run("r")
+    T.eq(wins, 1)
+    T.eq(GS.won, false)
+    local f2 = drawn_frame()
+    T.eq(has_text(f2.prints, DRAW_COMPLETE_PREFIX), false)
+    T.eq(has_text(f2.prints, " next"), true)
+    run("l")
+    T.eq(wins, 1)
+    T.eq(has_text(drawn_frame().prints, " next"), true)
+    run("c")
+    run("5e")
+    T.eq(wins, 2)
+    T.eq(GS.won, true)
+    T.eq(has_text(drawn_frame().prints, DRAW_COMPLETE_PREFIX),
+      true)
+    sfx.win = prev_win
+    GS.step_by_step = false
+  end)
+
+T.it("Esc while backing up after drawing target keeps first "
+  .. "win reachable on next step", function()
+    local wins = 0
+    local prev_win = sfx.win
+    sfx.win = function()
+      wins = wins + 1
+    end
+    step_mode_on("picture")
+    submit("5e;2b")
+    for _ = 1, 6 do
+      tick(1)
+    end
+    love.update(0.2)
+    T.eq(trace_count(), 5)
+    T.eq(GS.running, true)
+    T.eq(GS.win_macros, nil)
+    press({ }, "escape")
+    T.eq(GS.won, false)
+    T.eq(GS.win_macros, nil)
+    T.eq(wins, 0)
+    press({ }, "escape")
+    T.eq(widget.text, "")
+    run("r")
+    T.eq(wins, 1)
+    T.eq(GS.won, true)
+    T.eq(GS.win_macros ~= nil, true)
+    T.eq(has_text(drawn_frame().prints, DRAW_COMPLETE_PREFIX),
+      true)
+    press({ }, "tab")
+    T.eq(GS.level_index, 2)
+    sfx.win = prev_win
+    GS.step_by_step = false
+  end)
+
+T.it("typed s and Shift+s reach the field in both draw "
+  .. "games without flipping the mode", function()
+    for _, step_on in ipairs({ false, true }) do
+      for _, choice in ipairs({ "1", "2" }) do
+        GS.step_by_step = false
+        toDrawMenu()
+        if step_on then
+          type_key({ }, "s", "s")
+        end
+        T.eq(GS.step_by_step, step_on)
+        type_key({ }, choice, choice)
+        T.eq(widget.text, "")
+        type_key({ }, "n", "n")
+        T.eq(type_key({ }, "s", "s"), false)
+        T.eq(type_key({ "shift" }, "s", "S"), false)
+        T.eq(GS.step_by_step, step_on)
+        T.eq(widget.text, "nsS")
+      end
+    end
     GS.step_by_step = false
   end)
 

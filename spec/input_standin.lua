@@ -152,23 +152,27 @@ end
 -- A key press through the routing. mods in the runtime's
 -- combo order: ctrl, alt, shift.
 
-local function route(mods, key, isrepeat)
+local function combo_of(mods, key)
   local combo = table.concat(mods, "+")
   if combo ~= "" then
     combo = combo .. "+"
   end
-  combo = combo .. key
+  return combo .. key
+end
+
+local function route(mods, key, isrepeat)
+  local combo = combo_of(mods, key)
   local sc = compy.input.shortcuts.keypressed[combo]
   if sc and sc(key, "", isrepeat) then
-    return
+    return true
   end
   local hook = compy.input.hooks.keypressed
   if hook and hook(key, "", isrepeat) then
-    return
+    return true
   end
   local cancel = widget.shown and combo == "escape"
   if not cancel then
-    return
+    return false
   end
   if widget.flags.clear_on_cancel then
     widget.text = ""
@@ -176,6 +180,24 @@ local function route(mods, key, isrepeat)
   if widget.flags.hide_on_cancel then
     widget.shown = false
   end
+  return true
+end
+
+local function route_text(mods, ch)
+  local tbl = compy.input.shortcuts.textinput
+  local sc = tbl[combo_of(mods, ch)] or tbl[ch]
+  if sc and sc(ch) then
+    return true
+  end
+  local hook = compy.input.hooks.textinput
+  if hook and hook(ch) then
+    return true
+  end
+  if widget.shown then
+    widget.text = widget.text .. ch
+    return true
+  end
+  return false
 end
 
 function press(mods, key, isrepeat)
@@ -183,8 +205,20 @@ function press(mods, key, isrepeat)
   for _, m in ipairs(mods) do
     held[m] = true
   end
-  route(mods, key, isrepeat)
+  local taken = route(mods, key, isrepeat)
   held = { }
+  return taken
+end
+
+function type_key(mods, key, ch)
+  held = { }
+  for _, m in ipairs(mods) do
+    held[m] = true
+  end
+  local taken = route(mods, key, false)
+  route_text(mods, ch)
+  held = { }
+  return taken
 end
 
 -- Enter on the shown field, as the IDE takes it: a non-empty

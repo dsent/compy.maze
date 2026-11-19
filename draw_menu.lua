@@ -47,9 +47,10 @@ function drawMenu()
   drawMenuToggle(w, h)
 end
 
-function toggleStepByStepKey(key)
-  local hit = key == "s" or key == "S"
-  if not hit then
+STEP_TOGGLE_COMBOS = { "s", "shift+s" }
+
+function onStepToggle()
+  if GS.screen ~= "menu" then
     return false
   end
   GS.step_by_step = not GS.step_by_step
@@ -57,9 +58,6 @@ function toggleStepByStepKey(key)
 end
 
 function drawMenuKey(key)
-  if toggleStepByStepKey(key) then
-    return
-  end
   for _, choice in ipairs(DRAW_MODES) do
     if choice.key == key then
       startDrawMode(choice.mode)

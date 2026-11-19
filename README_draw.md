@@ -54,9 +54,11 @@ In default mode it comes back holding your program (or empty after a
 win); in step-by-step mode it comes back empty, and pressing Up at the
 first line recalls your last step. Press Esc while the robot moves to
 stop it where it is: the drawing stays and the field comes back holding
-that run's text. Press Esc to empty the field and start a new program.
-Esc on an empty field returns to the drawing-game menu, and Esc at that
-menu leaves Draw.
+that run's text. In step-by-step mode that unfinished move stays
+frozen until your next step, which clears it and starts from the last
+cell and direction the robot finished reaching. Press Esc to empty the
+field and start a new program. Esc on an empty field returns to the
+drawing-game menu, and Esc at that menu leaves Draw.
 
 You can give directions on a compass:
 
@@ -156,11 +158,13 @@ In Draw the picture, use the same level commands as Maze:
 Put a number in front to jump several: 3. moves three pictures forward
 and 2, moves two back, stopping at the first or last picture. A jump to
 another picture opens a fresh copy of it with an empty text field. The
-moves after the jump do not run. In default mode a jump carries no
-shortcuts and Tab carries the last winning program's shortcuts; in
-step-by-step mode both Tab and jumps carry all shortcuts you have
-defined. A jump that stays on the same picture, such as , on the first
-one, starts it over.
+moves after the jump do not run. In default mode a jump opens the
+picture with the shortcuts the picture you left started with (those
+earlier wins handed on) and drops what the jumping program defined,
+while Tab carries the last winning program's shortcuts. In step-by-step
+mode a jump keeps everything: both Tab and jumps carry all shortcuts you
+have defined. A jump that stays on the same picture, such as , on the
+first one, starts it over.
 
 ## The Screen
 

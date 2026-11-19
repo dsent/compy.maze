@@ -34,6 +34,7 @@ GS = {
   level_index = nil,
   hint = false,
   won = false,
+  was_matched = false,
   running = false,
   step_by_step = false,
   base_macros = { }
@@ -60,6 +61,14 @@ function blocked(tc, tr)
   return tc < 1 or GRID.cols < tc or tr < 1 or GRID.rows < tr
 end
 
+function tracesCurrentlyMatched()
+  local level = currentDrawLevel()
+  if not level then
+    return false
+  end
+  return tracesMatchTarget(player.traces, level)
+end
+
 -- In default mode a validated program runs from a clean start
 -- (drawing cleared, robot home). In step-by-step mode it runs
 -- on top of the canvas, clearing only any frozen stop anim.
@@ -68,8 +77,11 @@ function before_run()
   GS.won = false
   if GS.step_by_step then
     player.anim = nil
+    local won = GS.win_macros ~= nil
+    GS.was_matched = won and tracesCurrentlyMatched()
     return
   end
+  GS.was_matched = false
   local col, row, dir = activeStart()
   player_reset(col, row, dir)
 end
@@ -79,10 +91,9 @@ end
 
 function finish_run()
   GS.running = false
-  local level = currentDrawLevel()
-  local matched = level and
-      tracesMatchTarget(player.traces, level)
-  if not matched then
+  local matched = tracesCurrentlyMatched()
+  local celebrate = matched and not GS.was_matched
+  if not celebrate then
     return
   end
   GS.won = true
@@ -197,6 +208,7 @@ function resetDrawProgramState()
   GS.program = nil
   GS.running = false
   GS.won = false
+  GS.was_matched = false
   GS.win_macros = nil
   cur_controls = editor
   cur_legend = DRAW_LEGEND
@@ -250,6 +262,7 @@ function toDrawMenu()
   GS.screen = "menu"
   GS.draw_mode = nil
   GS.won = false
+  GS.was_matched = false
   GS.win_macros = nil
   player.queue = { }
   player.queue_refs = { }
@@ -394,6 +407,11 @@ end
 
 compy.input.shortcuts.keypressed["escape"] =
     compy.input.fn.stop_here(compy.input.fn.ignore_repeat(on_escape))
+
+for _, combo in ipairs(STEP_TOGGLE_COMBOS) do
+  compy.input.shortcuts.keypressed[combo] =
+      compy.input.fn.ignore_repeat(onStepToggle)
+end
 
 function drawGameKey(key)
   local fn = SYSTEM_KEYS[key]

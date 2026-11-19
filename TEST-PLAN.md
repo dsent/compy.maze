@@ -112,7 +112,8 @@ recorded source identity and the previous project is backed up.
 9. Run `.` and `,` to confirm next/previous navigation, then
    use a counted jump and confirm first/last clamping. Run
    `y=s;.`, then `y` on the next picture, and confirm "Unknown
-   command: Y": a jump carries no shortcut.
+   command: Y": a jump drops what the jumping program defined
+   while keeping shortcuts earlier wins handed on.
 10. Confirm Pictures 1-7 complete without retracing. Complete
    T with `4W2E5S` and confirm retracing is accepted.
 11. On a hint-off task, toggle the hint on, draw an extra edge,
@@ -147,9 +148,9 @@ recorded source identity and the previous project is backed up.
     `q` (refused), confirm text and drawing stay and Esc restores
     `Next step:`. Submit `4n`, press Esc mid-run to confirm frozen
     half step and field holding `4n` with `Next step:`, then run
-    `e` cleanly. Esc back to the menu, confirm `S  Step by step: on`
-    holds, re-open Free draw and confirm fresh start and `Unknown
-    command: X` for `x`.
+    `e` cleanly from the last finished cell. Esc back to the menu,
+    confirm `S  Step by step: on` holds, re-open Free draw and
+    confirm fresh start and `Unknown command: X` for `x`.
 19. With `S  Step by step: on`, open Draw the picture (`Next
     step:`). Complete Picture 1 across two steps (`x=2e;x`, then
     `3e`) and confirm the completion banner; run `y=n;y` on top and
