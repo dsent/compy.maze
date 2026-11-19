@@ -21,6 +21,17 @@ function setDrawMenuColor(alpha)
   gfx.setColor(color[1], color[2], color[3], alpha)
 end
 
+function stepByStepLabel()
+  local on = GS and GS.step_by_step
+  local state = on and "on" or "off"
+  return "S  Step by step: " .. state
+end
+
+function drawMenuToggle(w, h)
+  setDrawMenuColor(1)
+  gfx.printf(stepByStepLabel(), 0, h * 0.66, w, "center")
+end
+
 function drawMenu()
   local w, h = gfx.getDimensions()
   gfx.setColor(Color[Color.white])
@@ -33,6 +44,17 @@ function drawMenu()
     setDrawMenuColor(1)
     gfx.printf(label, 0, y, w, "center")
   end
+  drawMenuToggle(w, h)
+end
+
+STEP_TOGGLE_COMBOS = { "s", "shift+s" }
+
+function onStepToggle()
+  if GS.screen ~= "menu" then
+    return false
+  end
+  GS.step_by_step = not GS.step_by_step
+  return true
 end
 
 function drawMenuKey(key)

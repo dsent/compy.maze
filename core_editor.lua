@@ -7,9 +7,8 @@
 
 -- Macros (editor X=... sequences and recorded keyboard
 -- macros) carry across levels through a per-level base.
--- Each editor run rebuilds the table from that base, so a
--- definition deleted from the program is dropped; only
--- carried base bindings survive a restart.
+-- Unless GS.step_by_step is set, each editor run rebuilds
+-- the table from that base, so dropped definitions go.
 
 function clone_macros(src)
   local t = { }
@@ -21,9 +20,8 @@ end
 
 -- before_run() is supplied by the app and called by
 -- start_program once a program validates: the maze resets
--- the level, and draw clears the drawing and sends the
--- robot to its start. The core names it but never defines
--- it.
+-- the level, and draw resets or continues its canvas by
+-- mode. The core names it but never defines it.
 
 -- Editor input processing
 
@@ -36,6 +34,9 @@ end
 function input_prompt()
   if GS.invalid then
     return GS.invalid.msg
+  end
+  if GS.step_by_step then
+    return "Next step:"
   end
   return "Commands:"
 end
@@ -102,10 +103,9 @@ function reject_program(text, bad, lines)
 end
 
 -- Esc empties the field (each program's on_escape). A
--- refused program's error goes with its text: the prompt says
--- "Commands:" again and the echo is empty, as at a level's
--- fresh start, so the screen says nothing about a program
--- that is gone.
+-- refused program's error goes with its text: the prompt
+-- returns to input_prompt() and the echo empties, as at a
+-- level's fresh start.
 
 function clear_field()
   compy.input.clear()
@@ -159,12 +159,18 @@ end
 -- answers only Esc and the Menu key then. The end of the run
 -- brings it back (rearm_input), and so does a stop.
 
+function prepare_macros()
+  if not GS.step_by_step then
+    macros = clone_macros(GS.base_macros)
+  end
+end
+
 function start_program(text)
   GS.failed = nil
   GS.crash = nil
   local lines = string.lines(text)
   local earlier = macros
-  macros = clone_macros(GS.base_macros)
+  prepare_macros()
   local bad = validate_program(lines)
   if bad then
     macros = earlier
@@ -206,7 +212,8 @@ function rearm_input()
   end
   finish_run()
   if ctrl_update and editor_idle() then
-    set_prompt(GS.program or "")
+    local text = GS.step_by_step and "" or (GS.program or "")
+    set_prompt(text)
   end
 end
 

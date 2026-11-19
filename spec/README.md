@@ -83,7 +83,22 @@ the feature exists. When a feature lands, its
   saying `finish` on the last picture, clear of preview and
   legend), and can win again to show the banner; Tab moves on
   when idle, carrying the last winning program's shortcuts
-  even after later runs defined others or were rejected.
+  even after later runs defined others or were rejected. In
+  step-by-step mode (toggled by `s` or `Shift+s` on the menu
+  only, once per press with Ctrl/Alt ignored, without
+  disarming `1`/`2` guards or swallowing typed `s`/`S` in
+  either draw game, and held across games until flipped
+  again): the prompt is `Next step:` (or the
+  error message on a refused step), runs build on the canvas
+  and robot pose without resetting, the field returns empty
+  while Up recalls the last step, Esc freezes a step in
+  flight with its text and restores `Next step:` before
+  leaving to the menu, `C` clears and resets home while
+  keeping shortcuts, returning to the menu resets cleanly, and
+  all shortcuts persist across steps, Tab (even after post-win
+  stray steps) and `.`/`,` jumps, steps are judged while
+  celebrating only on a fresh match or first recorded win, and
+  the last picture's side hint reads `finish`.
 - `maze_run_spec.lua` — maze's shortcut rule, which draw
   follows: an earlier run's shortcut is unknown, a win
   carries the last winning program's shortcuts to the next
