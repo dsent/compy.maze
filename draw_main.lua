@@ -24,6 +24,9 @@ macros = { }
 cur_controls = nil
 cur_legend = DRAW_LEGEND
 
+-- GS.win_macros holds the winning program's shortcuts while
+-- the child stays on a won picture; nil until won.
+
 GS = {
   init = false,
   screen = "menu",
@@ -80,6 +83,7 @@ function finish_run()
     return
   end
   GS.won = true
+  GS.win_macros = clone_macros(macros)
   ctrl_update = nil
   open_editor("")
   sfx.win()
@@ -183,6 +187,7 @@ function resetDrawProgramState()
   GS.program = nil
   GS.running = false
   GS.won = false
+  GS.win_macros = nil
   cur_controls = editor
   cur_legend = DRAW_LEGEND
   macros = clone_macros(GS.base_macros)
@@ -235,6 +240,7 @@ function toDrawMenu()
   GS.screen = "menu"
   GS.draw_mode = nil
   GS.won = false
+  GS.win_macros = nil
   player.queue = { }
   player.queue_refs = { }
   ctrl_update = nil
@@ -244,7 +250,7 @@ function toDrawMenu()
 end
 
 function nextPictureLevel()
-  GS.base_macros = clone_macros(macros)
+  GS.base_macros = clone_macros(GS.win_macros or macros)
   GS.level_index = GS.level_index + 1
   if #DRAW_LEVELS < GS.level_index then
     toDrawMenu()
@@ -297,10 +303,12 @@ TAB_COMBOS = {
 }
 
 function tabProgression()
-  if GS.screen ~= "game" then
+  local busy = GS.screen ~= "game" or GS.running
+  if busy then
     return
   end
-  if GS.won then
+  local can = GS.won or GS.win_macros
+  if can then
     nextPictureLevel()
   end
 end

@@ -241,3 +241,36 @@ function draw_legend()
   gfx.setColor(Color[Color.black])
   gfx.print(cur_legend, legend_left(font), legend_top(font))
 end
+
+-- Short Tab hint in the right column above `bottom_y`.
+-- Uses the banner's Tab keycap and restores the caller's
+-- font after draw_key swaps it.
+
+function tab_hint_gap()
+  return 2 * SCALE
+end
+
+function tab_hint_top(bottom_y)
+  return (bottom_y - height.tab) - tab_hint_gap()
+end
+
+function tab_hint_left(font, text)
+  local w = gfx.getWidth()
+  local fh = font:getHeight()
+  local hw = width.tab + font:getWidth(text)
+  local fw = cur_legend and font:getWidth(cur_legend) or hw
+  local left = math.min(legend_left(font), (w - hw) - fh)
+  return left + math.max(0, (fw - hw) / 2)
+end
+
+function draw_tab_hint(bottom_y)
+  local font = gfx.getFont()
+  local text = TAB_HINT_TEXT
+  local x = tab_hint_left(font, text)
+  local y = tab_hint_top(bottom_y)
+  local ty = y + (height.tab - font:getHeight()) / 2
+  draw_key(x, y, "tab")
+  gfx.setFont(font)
+  gfx.setColor(Color[Color.black])
+  gfx.print(text, x + width.tab, ty)
+end

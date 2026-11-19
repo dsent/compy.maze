@@ -18,8 +18,88 @@ dofile(here .. "/../maze_main.lua")
 gfx.getDimensions = function()
   return 1024, 600
 end
+gfx.getWidth = function()
+  return 1024
+end
+gfx.getHeight = function()
+  return 600
+end
+
+local function utf8_cols(s)
+  local _, n = s:gsub("[\128-\191]", "")
+  return #s - n
+end
+
+local function text_cols(s)
+  local best = 0
+  for line in (s .. "\n"):gmatch("(.-)\n") do
+    best = math.max(best, utf8_cols(line))
+  end
+  return best
+end
+
+love.graphics = gfx
+local font = {
+  getWidth = function(_, s)
+    return 16 * text_cols(s)
+  end,
+  getHeight = function()
+    return 37
+  end,
+  getLineHeight = function()
+    return 33 / 37
+  end,
+  getWrap = function(_, s, lim)
+    local cols = math.max(1, math.floor(lim / 16))
+    local lines = { }
+    for i = 1, #s, cols do
+      lines[#lines + 1] = s:sub(i, i + cols - 1)
+    end
+    return lim, lines
+  end
+}
+gfx.getFont = function()
+  return font
+end
+hud_font = font
+SCALE = 960 / 201.5
+STD_W = 15
+STD_H = 12.5
+width = { tab = 19 * SCALE }
+height = { tab = 12.5 * SCALE }
+Color = setmetatable({ black = 0 }, {
+  __index = function()
+    return { 0, 0, 0 }
+  end
+})
+draw_key = function() end
+local real_grid_opts = grid_opts
 grid_opts = function()
   return { }
+end
+dofile(here .. "/../core_render.lua")
+dofile(here .. "/../maze_render.lua")
+
+local function drawn_tab_hint()
+  local shown
+  local prev_key = draw_key
+  local prev_print = gfx.print
+  draw_key = function(x, y, name)
+    if name == "tab" then
+      shown = { x = x, y = y }
+    end
+  end
+  gfx.print = function(text, x, y)
+    if shown and text == TAB_HINT_TEXT then
+      shown.text = text
+      shown.tx = x
+      shown.ty = y
+    end
+  end
+  draw_hud_corner()
+  draw_key = prev_key
+  rawset(gfx, "print", prev_print)
+  return shown
 end
 
 -- All mazes, level 4: the first level with the command field.
@@ -307,5 +387,157 @@ T.it("a win carries the winning program's shortcuts, and Maze 5 "
   run("x")
   T.eq(GS.invalid, nil)
 end)
+
+T.it("Maze 5: Tab hint is absent before a win and at the banner",
+  function()
+    on_level(5)
+    T.eq(drawn_tab_hint(), nil)
+    run("n")
+    press({ }, "tab")
+    T.eq(drawn_tab_hint(), nil)
+    run("ne2n2en")
+    T.eq(GS.celebrating, true)
+    T.eq(drawn_tab_hint(), nil)
+  end)
+
+T.it("Maze 5: Enter after a win shows the hint and stays through "
+  .. "runs, stops, failures and refusals", function()
+    on_level(5)
+    run("ne2n2en")
+    submit("2n")
+    tick(1)
+    T.eq(GS.celebrating, false)
+    T.eq(drawn_tab_hint() ~= nil, true)
+    press({ }, "tab")
+    T.eq(level_index, 5)
+    press({ }, "escape")
+    T.eq(GS.running, false)
+    T.eq(drawn_tab_hint() ~= nil, true)
+    run("n")
+    T.eq(GS.failed, "miss")
+    T.eq(drawn_tab_hint() ~= nil, true)
+    press({ }, "tab")
+    T.eq(level_index, 5)
+    T.eq(GS.failed, nil)
+    T.eq(widget.text, "n")
+    T.eq(drawn_tab_hint() ~= nil, true)
+    run("e")
+    T.eq(GS.failed, "crash")
+    press({ }, "tab")
+    T.eq(level_index, 5)
+    T.eq(GS.failed, nil)
+    run("q")
+    T.eq(GS.invalid.msg, "Unknown command: Q")
+    T.eq(drawn_tab_hint() ~= nil, true)
+    press({ }, "tab")
+    T.eq(level_index, 6)
+    T.eq(drawn_tab_hint(), nil)
+  end)
+
+T.it("Maze 5: Esc at the miss banner dismisses it and keeps the hint",
+  function()
+    on_level(5)
+    run("ne2n2en")
+    run("n")
+    T.eq(GS.failed, "miss")
+    press({ }, "escape")
+    T.eq(GS.failed, nil)
+    T.eq(level_index, 5)
+    T.eq(drawn_tab_hint() ~= nil, true)
+    press({ }, "tab")
+    T.eq(level_index, 6)
+  end)
+
+T.it("Maze 5: a second win shows the celebration banner again",
+  function()
+    on_level(5)
+    run("ne2n2en")
+    run("n")
+    press({ }, "tab")
+    T.eq(drawn_tab_hint() ~= nil, true)
+    run("ne2n2en")
+    T.eq(GS.celebrating, true)
+    T.eq(drawn_tab_hint(), nil)
+    press({ }, "tab")
+    T.eq(level_index, 6)
+  end)
+
+T.it("Maze 5: staying carries the last winning program's shortcuts",
+  function()
+    on_level(5)
+    run("x=n;xe2n2en")
+    run("y=e;n")
+    press({ }, "tab")
+    press({ }, "tab")
+    T.eq(level_index, 6)
+    run("y")
+    T.eq(GS.invalid.msg, "Unknown command: Y")
+    run("x")
+    T.eq(GS.invalid, nil)
+  end)
+
+T.it("Maze 5: a stopped run or later win updates carry only on win",
+  function()
+    on_level(5)
+    run("x=n;xe2n2en")
+    run("z=n;ze2n2en")
+    submit("y=e;2n")
+    tick(1)
+    press({ }, "escape")
+    press({ }, "tab")
+    T.eq(level_index, 6)
+    run("x")
+    T.eq(GS.invalid.msg, "Unknown command: X")
+    run("y")
+    T.eq(GS.invalid.msg, "Unknown command: Y")
+    run("z")
+    T.eq(GS.invalid, nil)
+  end)
+
+T.it("Maze: Tab hint clears title, 3-line shortcuts, legend and "
+  .. "all level grids", function()
+    local legend = "  N \nW + E L:↺ R:↻\n  S   F:↑ B:↓\n"
+    for _, fh in ipairs({ 32, 37 }) do
+      font.getHeight = function() return fh end
+      font.getLineHeight = function() return 33 / fh end
+      on_level(5)
+      run("ne2n2en")
+      run("a=n;c=n;d=n;g=n;h=n;i=n;j=n;k=n;m=n;"
+        .. "o=n;p=n;q=n;t=n;u=n;v=n;x=n;y=n;z=n;n")
+      cur_legend = legend
+      local h = drawn_tab_hint()
+      local hw = width.tab + font:getWidth(h.text)
+      local row = text_row(font)
+      T.eq(h.text, TAB_HINT_TEXT)
+      T.eq(legend_left(font) <= h.x, true)
+      T.eq(h.x + hw <= 1024 - fh, true)
+      T.eq(fh * 1.5 <= h.y, true)
+      T.eq(h.y + height.tab <= legend_top(font) - 3 * row, true)
+      for _, track in ipairs(TRACKS) do
+        start_track(track)
+        for i, lvl in ipairs(track.levels) do
+          level_index = i
+          maze = lvl
+          start_level()
+          cur_legend = legend
+          init_grid(#maze, #(maze[1]), real_grid_opts())
+          T.eq(GRID.offset_x + GRID.cols * GRID.cell <= h.x, true)
+          if cur_controls == plan then
+            local _, lim = prompt_column()
+            local _, lines = font:getWrap(PLAN_PROMPT, lim)
+            local ptop = prompt_top(font, lim)
+            local pbot = ptop + #lines * fh
+            T.eq(fh * 1.5 <= ptop, true)
+            T.eq(pbot <= hud_corner_top(), true)
+            GS.win_macros = { }
+            local ph = drawn_tab_hint()
+            local ptop_w = prompt_top(font, lim)
+            T.eq(fh * 1.5 <= ptop_w, true)
+            T.eq(ptop_w + #lines * fh <= ph.y, true)
+          end
+        end
+      end
+    end
+  end)
 
 T.run()

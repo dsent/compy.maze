@@ -48,6 +48,11 @@ TRACE = { radius_frac = 0.08 }
 
 FIELD_ROWS = 2
 
+-- Word after the Tab keycap in the right-column hint
+-- shown after a win when the child stays on the level.
+
+TAB_HINT_TEXT = " next"
+
 -- Maximum echo lines visible on screen.
 
 MAX_ECHO_LINES = 16

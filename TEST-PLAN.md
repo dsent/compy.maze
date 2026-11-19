@@ -41,8 +41,16 @@ recorded source identity and the previous project is backed up.
    Back on that level, type `<`, press Enter, and confirm it
    is refused as invalid input. Replace the text with `y=e;.`
    and run it; on Maze 5 run `y` and confirm "Unknown command:
-   Y": a jump carries no shortcut. Press Esc to empty the field
-   and Esc again for the maze menu.
+   Y": a jump carries no shortcut.
+   Still on Maze 5, win with `x=n;xe2n2en` and confirm the
+   celebration banner shows with no column Tab hint. Type
+   `y=e;n` and press Enter: the banner goes and a `[Tab] next`
+   hint appears above the legend. Wait for the miss banner,
+   press Tab once to dismiss it (`n` returns to the field and
+   the hint stays), then press Tab again to advance to Maze 6.
+   Run `y` (refused), then `x` (moves north): only the last
+   winning program's shortcuts carried. Press Esc to empty the
+   field and Esc again for the maze menu.
 8. At the maze menu, press Shift+Esc, Alt+Esc and
    Alt+Shift+Esc and confirm the menu stays; press Esc and
    confirm Maze leaves for the console.
@@ -83,12 +91,15 @@ recorded source identity and the previous project is backed up.
 6. Toggle the faint field hint off and on with the Menu key.
    Click on the canvas and confirm the hint stays as it is.
 7. Complete Line with `5E`; confirm the completion stripe shows
-   the Tab key glyph and that the field is back and empty. Type
-   `5E` and press Enter in place of Tab: the program runs again
-   from a clean start and the stripe comes back. Type `X=5E;X`
-   and run it, then type `Q`
-   (refused), then press Tab, and confirm `X` runs on Picture
-   2/20; go back with `,`.
+   the Tab key glyph, the column shows no Tab hint, and the
+   field is back and empty. Type `5E` and press Enter in place
+   of Tab: the program runs again from a clean start and the
+   stripe comes back. Type `X=5E;X` and run it to win again,
+   then type `Y=3E;Y` and run it: the stripe goes and `[Tab]
+   next` appears above the legend without covering the preview
+   or legend. Type `Q` (refused), confirm the hint stays, then
+   press Tab and confirm `X` runs on Picture 2/20 while `Y` is
+   refused; go back with `,`.
 8. Complete Line again with `5E`, then press Tab. Confirm
    Picture 2/20 starts with its declared hint
    default, an empty field and a fresh trail at its own start

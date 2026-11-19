@@ -362,10 +362,28 @@ function prompt_column()
   return x, lim
 end
 
+function tab_hint_showing()
+  if not GS.win_macros then
+    return false
+  end
+  if GS.celebrating then
+    return false
+  end
+  return not GS.won
+end
+
+function hud_top()
+  local top = hud_corner_top()
+  if tab_hint_showing() then
+    return tab_hint_top(top)
+  end
+  return top
+end
+
 function prompt_top(font, lim)
   local _, lines = font:getWrap(PLAN_PROMPT, lim)
   local th = #lines * font:getHeight()
-  return (hud_corner_top() - th) - font:getHeight() / 2
+  return (hud_top() - th) - font:getHeight() / 2
 end
 
 function draw_plan_prompt()
@@ -416,12 +434,20 @@ function hud_corner_top()
   return legend_top(font) - macro_h - hud_lift()
 end
 
+function draw_tab_hint_corner()
+  if not tab_hint_showing() then
+    return
+  end
+  draw_tab_hint(hud_corner_top())
+end
+
 function draw_hud_corner()
   gfx.push()
   gfx.translate(0, -hud_lift())
   draw_legend()
   draw_macros_list()
   gfx.pop()
+  draw_tab_hint_corner()
 end
 
 -- Win modal.
