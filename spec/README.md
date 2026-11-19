@@ -25,8 +25,8 @@ Output ends with a summary line:
     4 passed, 0 failed, 0 pending
     11 passed, 0 failed, 0 pending
     5 passed, 0 failed, 0 pending
-    29 passed, 0 failed, 0 pending
-    35 passed, 0 failed, 0 pending
+    31 passed, 0 failed, 0 pending
+    37 passed, 0 failed, 0 pending
 
 Exit code is `0` when nothing failed, non-zero otherwise,
 so the same command works in a CI check. A failure prints
@@ -84,9 +84,12 @@ the feature exists. When a feature lands, its
   program, as the keys are delivered to it: a bare Esc
   empties a field that holds text (and maze's plan when it
   holds keys) and steps back to the menu from an empty one
-  or a level with neither; at the menu it leaves the
-  program; Esc with Ctrl, Alt or Shift held, when it reaches
-  the program, does none of this and leaves the field shown
+  or a level with neither; emptying a refused program also
+  puts the prompt back to "Commands:" and empties the echo,
+  while a field emptied by hand still steps back; at the menu
+  it leaves the program; Esc with Ctrl, Alt or Shift held,
+  when it reaches the program, does none of this and leaves
+  the field shown
   (Ctrl+Esc never reaches it: the IDE keeps that chord and
   quits on it); a held Esc acts once, so one that reached the
   menu stays there; the field is given no cancel flag of its

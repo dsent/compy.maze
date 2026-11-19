@@ -68,10 +68,10 @@ and no device:
    `5 passed, 0 failed, 0 pending`);
 8. the Draw Escape spec passes
    (`lua spec/draw_escape_spec.lua`, expect
-   `29 passed, 0 failed, 0 pending`);
+   `31 passed, 0 failed, 0 pending`);
 9. the Maze Escape spec passes
    (`lua spec/maze_escape_spec.lua`, expect
-   `35 passed, 0 failed, 0 pending`);
+   `37 passed, 0 failed, 0 pending`);
 10. each project is self-contained -- every `require`
     resolves inside its own folder, except the runtime
     modules (`utf8`, `gfx`, `Color`, `compy.audio`).

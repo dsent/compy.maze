@@ -48,6 +48,35 @@ T.it("no mouse hook takes a click from the field", function()
   T.eq(love.mousepressed, nil)
 end)
 
+-- A refused program's error goes with its text: the prompt
+-- says "Commands:" again and the echo is empty, as at a
+-- level's fresh start.
+
+T.it("Esc after a refused program clears its error", function()
+  in_game("")
+  open_editor("")
+  submit("q")
+  T.eq(widget.text, "q")
+  T.eq(widget.flags.prompt, "Unknown command: Q")
+  press({ }, "escape")
+  T.eq(widget.text, "")
+  T.eq(widget.flags.prompt, "Commands:")
+  T.eq(GS.invalid, nil)
+  T.eq(echo_lines, { })
+  T.eq(GS.mode, "game")
+  press({ }, "escape")
+  T.eq(GS.mode, "menu")
+end)
+
+T.it("Esc on a field emptied by hand still goes back", function()
+  in_game("")
+  open_editor("")
+  submit("q")
+  widget.text = ""
+  press({ }, "escape")
+  T.eq(GS.mode, "menu")
+end)
+
 T.it("Esc empties the field and stays in the level", function()
   in_game("FF")
   press({ }, "escape")
