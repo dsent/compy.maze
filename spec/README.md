@@ -23,8 +23,8 @@ Output ends with a summary line:
     10 passed, 0 failed, 0 pending
     3 passed, 0 failed, 0 pending
     4 passed, 0 failed, 0 pending
-    20 passed, 0 failed, 0 pending
-    18 passed, 0 failed, 0 pending
+    28 passed, 0 failed, 0 pending
+    29 passed, 0 failed, 0 pending
     31 passed, 0 failed, 0 pending
     36 passed, 0 failed, 0 pending
 
@@ -77,26 +77,41 @@ the feature exists. When a feature lands, its
   its shortcuts to the next one, and a jump opens its picture
   with the shortcuts the picture it left started with. Every
   picture's route is one valid program on one field line
-  that completes it. Enter after a win runs again and can win
-  again, and Tab moves on; a rejected program keeps the
-  winning program's shortcuts.
+  that completes it. Enter after a win runs again, moves the
+  Tab hint to the right column (absent before a win and at the
+  banner, kept across non-winning, stopped and refused runs,
+  saying `finish` on the last picture, clear of preview and
+  legend), and can win again to show the banner; Tab moves on
+  when idle, carrying the last winning program's shortcuts
+  even after later runs defined others or were rejected.
 - `maze_run_spec.lua` — maze's shortcut rule, which draw
   follows: an earlier run's shortcut is unknown, a win
-  carries the program's shortcuts to the next level, and a
-  jump carries none of them. The field is away while the
-  robot moves, and after a miss or a crash until Tab or Esc
-  brings it back with the program; a celebration brings it
-  back empty. Enter, keys and Tab change nothing during a
-  run. Esc stops a run, the step in flight frozen, even one
-  whose last step reached the goal or put the last box on
-  its target, and Tab waits for such a win; it judges
-  nothing. Esc stops a plan run with the robot home, the plan
-  kept and no step shown as run. A level is judged once per
-  run, never on entry, Maze 5 included right after Maze 4's
-  automatic advance.
+  carries the last winning program's shortcuts to the next
+  level, and a jump carries none of them. The field is away
+  while the robot moves, and after a miss or a crash until Tab
+  or Esc brings it back with the program; a celebration brings
+  it back empty. Enter, keys and Tab change nothing during a
+  run, and Tab waits for an active win animation on
+  direct-control levels too, where shortcuts recorded with Shift
+  at a celebration also carry on Tab. Enter after a celebration clears
+  the banner and moves the Tab hint to the right column
+  (absent before a win and at celebration, miss and crash
+  banners, kept across non-winning, stopped and refused runs,
+  saying `finish` on the last level, clear of title, 3-line
+  shortcut list, legend, plan prompt and all level grids); a
+  miss or crash banner still takes Tab first for "try again",
+  and Tab from the hint advances with the last winning
+  program's shortcuts. Esc stops a run, the step in flight
+  frozen, even one whose last step reached the goal or put the
+  last box on its target, and Tab waits for such a win; it
+  judges nothing. Esc stops a plan run with the robot home,
+  the plan kept and no step shown as run. A level is judged
+  once per run, never on entry, Maze 5 included right after
+  Maze 4's automatic advance.
 - Both run specs drive the program as a child does: a
   program goes in through the field's Enter (`submit`), the
-  run goes on in `love.update` (`tick`), and Tab moves on.
+  run goes on in `love.update` (`tick`), Tab moves on, and
+  `love.draw` checks which Tab labels the frame draws.
 - `draw_escape_spec.lua`, `maze_escape_spec.lua` — Esc in each
   program, as the keys are delivered to it: a bare Esc
   empties a field that holds text (and maze's plan when it

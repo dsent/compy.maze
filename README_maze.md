@@ -151,8 +151,8 @@ Now X runs three right turns, later in the same
 program. A shortcut lasts for the program it is in, so
 define it and use it in one go: on one line with
 semicolons, or on several lines with Shift+Enter. When
-a program wins a level, its shortcuts come along to the
-next one.
+you move on after winning a level, the last winning
+program's shortcuts come along to the next one.
 
 Shortcuts can build on each other. Type these three
 lines with Shift+Enter between them, then press Enter:
@@ -242,10 +242,10 @@ Above the legend, every defined non-empty shortcut
 is shown by its letter. The list grows as you define
 shortcuts and shrinks when you erase them. It spans
 up to 3 lines of up to 8 letters, sorted
-alphabetically. When you win a level, the list comes
-with you to the next one; a jump to another level
-keeps only the shortcuts the level you left started
-with.
+alphabetically. When you move on after winning a level, the
+last winning program's shortcuts come with you to the next
+one; a jump to another level keeps only the shortcuts the
+level you left started with.
 
 ## Moving Between Levels
 
@@ -254,6 +254,13 @@ When you win, what happens next depends on the level:
 - Most levels wait: "Congratulations! Press Tab to
   proceed." appears with the Tab key shown as a
   keycap. Press Tab for the next level.
+- On levels with the command field, you can also type
+  another program and press Enter instead of Tab to keep
+  playing on the level: the message clears, a short Tab
+  hint appears above the legend whenever no try-again
+  message is up, and Tab takes you on (or finishes at the
+  last level) once the robot stops and no try-again
+  message is up.
 - Some levels go straight to the next one.
 
 You can also move between levels yourself:

@@ -29,9 +29,12 @@ drawn as one continuous trail. Some need you to travel over a
 line you already drew.
 
 When the trail matches the target, use the shown Tab key for
-the next picture. Extra lines are part of the drawing, so change
-your program and run it again: every run starts on a fresh
-canvas.
+the next picture. You can also type another program and press
+Enter to keep playing on the picture: the completion banner goes,
+a short Tab hint appears above the legend, and Tab moves on (or
+finishes at the last picture) whenever the robot is stopped. Extra lines are
+part of the drawing, so change your program and run it again:
+every run starts on a fresh canvas.
 
 Some pictures start with a faint target line on the canvas and
 some start without it. Press the Menu key at any time to turn
@@ -90,8 +93,9 @@ the commands:
 Now X runs three steps east, later in the same program. Put the
 shortcut and its uses on one line with semicolons, or on several
 lines with Shift+Enter. A shortcut lasts for the program it is
-in. When a program completes a picture, its shortcuts come along
-to the next picture. Shortcuts can build on each other. N, E,
+in. When you press Tab after completing a picture, the last
+program that completed it carries its shortcuts to the next
+picture. Shortcuts can build on each other. N, E,
 S, W, F, B, L, R and C are already commands, so they cannot
 name shortcuts.
 
@@ -143,9 +147,10 @@ Put a number in front to jump several: 3. moves three pictures
 forward and 2, moves two back, stopping at the first or last
 picture. A jump to another picture opens a fresh copy of it
 with an empty text field. The moves after the jump do not run,
-and no shortcut your program defines comes along: only a
-completed picture saves shortcuts. A jump that stays on the
-same picture, such as , on the first one, starts it over.
+and a jump carries no shortcuts. Pressing Tab carries the last
+winning program's shortcuts to the next picture. A jump that
+stays on the same picture, such as , on the first one, starts
+it over.
 
 ## The Screen
 
