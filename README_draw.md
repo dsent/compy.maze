@@ -41,11 +41,14 @@ this hint on or off.
 
 Type commands in the text field at the bottom and press Enter
 to run them. You hear a ping for each command except C. Clearing
-the canvas is silent. Your program stays in the field after it
-runs, so you can change it and press Enter to run it again.
-Press Esc to empty the field and start a new program. Esc on an
-empty field returns to the drawing-game menu, and Esc at that
-menu leaves Draw.
+the canvas is silent. The text field goes away while the robot
+moves and comes back with your program when it stops, so you
+can change it and press Enter to run it again. When a picture
+is complete, it comes back empty. Press Esc while
+the robot moves to stop it where it is: the drawing stays and
+your program comes back in the field. Press Esc to empty the
+field and start a new program. Esc on an empty field returns to
+the drawing-game menu, and Esc at that menu leaves Draw.
 
 You can give directions on a compass:
 
@@ -140,9 +143,9 @@ Put a number in front to jump several: 3. moves three pictures
 forward and 2, moves two back, stopping at the first or last
 picture. A jump to another picture opens a fresh copy of it
 with an empty text field. The moves after the jump do not run,
-and the shortcuts your program defines, before or after the
-jump, come along. A jump that stays on the same picture, such
-as , on the first one, starts it over and keeps none of them.
+and no shortcut your program defines comes along: only a
+completed picture saves shortcuts. A jump that stays on the
+same picture, such as , on the first one, starts it over.
 
 ## The Screen
 
@@ -153,13 +156,13 @@ scale and coordinates as the playing field.
 
 ## Leaving
 
-  Esc       — empty the text field; from an empty field,
-              return to the drawing-game menu; at the
-              menu, leave Draw for the console
+  Esc       — stop the robot; then empty the text field;
+              from an empty field, return to the
+              drawing-game menu; at the menu, leave Draw
+              for the console
   Ctrl+Q    — leave Draw for the console at once
 
-Esc works while editing, while a program is running, and
-after a completed picture. When the field holds text, the
-first Esc empties it and the next one returns. Each Esc goes
-back one step, so holding it down stops at the menu. Ctrl+Q
-leaves Draw from anywhere.
+While the robot moves, the first Esc stops it. When the field
+holds text, the next Esc empties it and the one after returns.
+Each Esc goes back one step, so holding it down stops the robot
+and goes no further. Ctrl+Q leaves Draw from anywhere.

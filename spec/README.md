@@ -23,10 +23,10 @@ Output ends with a summary line:
     10 passed, 0 failed, 0 pending
     3 passed, 0 failed, 0 pending
     4 passed, 0 failed, 0 pending
-    11 passed, 0 failed, 0 pending
-    5 passed, 0 failed, 0 pending
+    20 passed, 0 failed, 0 pending
+    18 passed, 0 failed, 0 pending
     31 passed, 0 failed, 0 pending
-    37 passed, 0 failed, 0 pending
+    36 passed, 0 failed, 0 pending
 
 Exit code is `0` when nothing failed, non-zero otherwise,
 so the same command works in a CI check. A failure prints
@@ -63,20 +63,37 @@ the feature exists. When a feature lands, its
 - `draw_menu_guard_spec.lua` — the menu key's one-time echo
   guards: armed per menu key, all cleared by the first fire.
 - `draw_run_spec.lua` — every draw run starts from a clean
-  canvas and the robot's start, `C` clears in the middle of
-  a program, and the field keeps the program; a shortcut
-  lives in its own program, and only the program that
-  completes a picture, or jumps, carries its shortcuts to
-  the next picture; every picture's route is one valid
-  program on one field line that completes it. Enter after a
-  win runs again and can win again, and Tab moves on; a
-  rejected program keeps the winning program's shortcuts.
+  canvas and the robot's start, and `C` clears in the middle
+  of a program. The field is away while the robot moves,
+  Enter and keys then change nothing, and the field comes
+  back with the program, or empty after a win. Esc during a
+  run stops it where it is, the step in flight frozen as it
+  looked (its time, the track offsets and the partial stroke
+  stay fixed) and lighting no token, and judges nothing; the next
+  Esc empties the field
+  and the one after leaves; a held Esc only stops; the run
+  after a stop starts clean. A shortcut lives in its own
+  program; only the program that completes a picture carries
+  its shortcuts to the next one, and a jump opens its picture
+  with the shortcuts the picture it left started with. Every
+  picture's route is one valid program on one field line
+  that completes it. Enter after a win runs again and can win
+  again, and Tab moves on; a rejected program keeps the
+  winning program's shortcuts.
 - `maze_run_spec.lua` — maze's shortcut rule, which draw
-  follows: an earlier run's shortcut is unknown, and a jump
-  or a win carries the program's shortcuts to the next level.
-  Enter in place of Tab after a miss runs and is judged; a
-  level is judged once per run, never on entry, Maze 5
-  included right after Maze 4's automatic advance.
+  follows: an earlier run's shortcut is unknown, a win
+  carries the program's shortcuts to the next level, and a
+  jump carries none of them. The field is away while the
+  robot moves, and after a miss or a crash until Tab or Esc
+  brings it back with the program; a celebration brings it
+  back empty. Enter, keys and Tab change nothing during a
+  run. Esc stops a run, the step in flight frozen, even one
+  whose last step reached the goal or put the last box on
+  its target, and Tab waits for such a win; it judges
+  nothing. Esc stops a plan run with the robot home, the plan
+  kept and no step shown as run. A level is judged once per
+  run, never on entry, Maze 5 included right after Maze 4's
+  automatic advance.
 - Both run specs drive the program as a child does: a
   program goes in through the field's Enter (`submit`), the
   run goes on in `love.update` (`tick`), and Tab moves on.

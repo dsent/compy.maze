@@ -12,6 +12,8 @@ recorded source identity and the previous project is backed up.
 4. Return to the menu with Esc. Open Drive the robot again and
    hold Esc for two seconds: the maze menu shows and stays.
 5. Open Plan a path, enter a short plan, run it, and retry it.
+   Run it again and press Esc while the robot moves: the robot
+   returns to the start and the plan stays.
 6. Return to the menu with Esc and open Plan a path again, so
    the plan can be edited (a won level locks it). Enter keys
    without pressing Enter, press Shift+Esc and confirm the
@@ -21,14 +23,26 @@ recorded source identity and the previous project is backed up.
    plan and confirm the maze menu.
 7. Open All mazes and press `.` three times to reach Maze 4,
    the first level with the command field (the first three
-   are direct-control). Run one editor command, and confirm
-   the robot, trail, compass, command echo, sound, and timing.
+   are direct-control). Run `n`, and confirm the robot, trail,
+   compass, command echo, sound, and timing, and that the field
+   is away while the robot moves and while "Goal not reached"
+   shows. Press Tab and confirm the field is back with `n`.
+   Run `n` again and press Esc at the message: the field is
+   back with `n` again. Run `2n2w`; while the robot
+   moves, type `e` and press Enter and confirm nothing
+   changes; press Esc and confirm the robot stops where it is
+   and the field holds `2n2w`; press Esc and confirm the field
+   empties; press Esc and confirm the maze menu; return to
+   Maze 4.
    Type a command without pressing Enter, press Shift+Esc,
    Alt+Esc and Alt+Shift+Esc, and confirm the text and the
    level stay. Press Esc and confirm the field empties and the
    level stays; press Esc again and confirm the maze menu.
    Back on that level, type `<`, press Enter, and confirm it
-   is refused as invalid input.
+   is refused as invalid input. Replace the text with `y=e;.`
+   and run it; on Maze 5 run `y` and confirm "Unknown command:
+   Y": a jump carries no shortcut. Press Esc to empty the field
+   and Esc again for the maze menu.
 8. At the maze menu, press Shift+Esc, Alt+Esc and
    Alt+Shift+Esc and confirm the menu stays; press Esc and
    confirm Maze leaves for the console.
@@ -40,7 +54,7 @@ recorded source identity and the previous project is backed up.
 1. Launch Draw and confirm the menu lists Free draw first and
    Draw the picture second.
 2. Open Free draw. Run `3e` and confirm three steps east and
-   that the field is empty while the robot moves and holds `3e`
+   that the field is away while the robot moves and holds `3e`
    again when it stops. Replace the field's text with `2n` and
    run it, and confirm only two steps north from the start cell
    show. Replace the text with `x=3e` and run it, then replace
@@ -52,7 +66,12 @@ recorded source identity and the previous project is backed up.
    the trail and robot stay. Type `EE`, press Shift+Esc,
    Alt+Esc, then Alt+Shift+Esc, and confirm the text stays.
    Hold Esc for two seconds and confirm the field empties and
-   Free draw stays.
+   Free draw stays. Run `7n7s7n7s`; while the robot moves, type
+   `e` and press Enter and confirm nothing changes; press Esc
+   and confirm the robot stops where it is, the drawing stays
+   and the field holds `7n7s7n7s`; press Esc and confirm the
+   field empties; press Esc and confirm the draw menu; open
+   Free draw again.
 3. Confirm Free draw has the original 8x8 canvas, right-side
    compass, bottom-left start, and soft edge.
 4. Type `<` in Free draw, press Enter, and confirm it is
@@ -64,9 +83,10 @@ recorded source identity and the previous project is backed up.
 6. Toggle the faint field hint off and on with the Menu key.
    Click on the canvas and confirm the hint stays as it is.
 7. Complete Line with `5E`; confirm the completion stripe shows
-   the Tab key glyph. Press Enter in place of Tab: the program
-   runs again from a clean start and the stripe comes back.
-   Replace the text with `X=5E;X` and run it, then with `Q`
+   the Tab key glyph and that the field is back and empty. Type
+   `5E` and press Enter in place of Tab: the program runs again
+   from a clean start and the stripe comes back. Type `X=5E;X`
+   and run it, then type `Q`
    (refused), then press Tab, and confirm `X` runs on Picture
    2/20; go back with `,`.
 8. Complete Line again with `5E`, then press Tab. Confirm
@@ -75,7 +95,9 @@ recorded source identity and the previous project is backed up.
    point. Run a wrong program, then a corrected one, and confirm
    the corrected run starts clean.
 9. Run `.` and `,` to confirm next/previous navigation, then
-   use a counted jump and confirm first/last clamping.
+   use a counted jump and confirm first/last clamping. Run
+   `y=s;.`, then `y` on the next picture, and confirm "Unknown
+   command: Y": a jump carries no shortcut.
 10. Confirm Pictures 1-7 complete without retracing. Complete
    T with `4W2E5S` and confirm retracing is accepted.
 11. On a hint-off task, toggle the hint on, draw an extra edge,

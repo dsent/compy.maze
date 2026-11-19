@@ -64,7 +64,11 @@ compy = {
     end,
     show = function(config)
       for k, v in pairs(config) do
-        widget.flags[k] = v
+        if k == "text" then
+          widget.text = table.concat(v, "\n")
+        else
+          widget.flags[k] = v
+        end
       end
       widget.shown = true
     end,

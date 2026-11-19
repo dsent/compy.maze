@@ -298,7 +298,9 @@ end
 -- false, clears the queue and resets GS.failed, so unlike
 -- next_level() we restore nothing and no "goal not reached"
 -- fires on arrival. The program ends here (commands after
--- the jump are dropped).
+-- the jump are dropped). Only a win saves shortcuts: the
+-- destination opens with the base the level it left started
+-- with, nothing the jumping program defined.
 
 function jump_level(delta)
   local idx = level_index + delta
@@ -309,7 +311,6 @@ function jump_level(delta)
     idx = #levels
   end
   if idx ~= level_index then
-    GS.base_macros = clone_macros(macros)
     level_index = idx
     maze = levels[idx]
   end
@@ -393,15 +394,18 @@ end
 -- the lose sound; a plain miss gets a soft "not yet" cue.
 -- Either way the run freezes input (ctrl_update = nil) and
 -- shows the failed modal until Tab; the robot holds in
--- place behind it.
+-- place behind it. A box-goal win is still the run until its
+-- animation ends (on_win), so Esc in its pause stops the run
+-- and Tab waits, as for a win on a goal cell.
 
 function finish_run()
-  GS.running = false
-  if GS.won or GS.celebrating or GS.crash then
+  local over = GS.won or GS.celebrating or GS.crash
+  if not over and box_goal_met() then
+    win_level(nil, sfx.wow)
     return
   end
-  if box_goal_met() then
-    win_level(nil, sfx.wow)
+  GS.running = false
+  if over then
     return
   end
   sfx.toggle()
