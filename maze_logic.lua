@@ -298,7 +298,9 @@ end
 -- false, clears the queue and resets GS.failed, so unlike
 -- next_level() we restore nothing and no "goal not reached"
 -- fires on arrival. The program ends here (commands after
--- the jump are dropped).
+-- the jump are dropped). Only a win saves shortcuts: the
+-- destination opens with the base the level it left started
+-- with, nothing the jumping program defined.
 
 function jump_level(delta)
   local idx = level_index + delta
@@ -309,7 +311,6 @@ function jump_level(delta)
     idx = #levels
   end
   if idx ~= level_index then
-    GS.base_macros = clone_macros(macros)
     level_index = idx
     maze = levels[idx]
   end

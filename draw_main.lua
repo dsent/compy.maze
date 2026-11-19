@@ -109,15 +109,16 @@ function takeDrawLevelRepeats(cmd)
   return count
 end
 
+-- Only a win saves shortcuts, as in maze: a jump opens the
+-- destination with the base the picture it left started
+-- with, nothing the jumping program defined.
+
 function jumpPictureLevel(delta)
   if GS.draw_mode ~= "picture" then
     return
   end
   local index = clampDrawLevelIndex(GS.level_index + delta)
-  if index ~= GS.level_index then
-    GS.base_macros = clone_macros(macros)
-    GS.level_index = index
-  end
+  GS.level_index = index
   startPictureLevel()
 end
 

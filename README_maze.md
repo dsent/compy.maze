@@ -258,11 +258,10 @@ You can also move between levels yourself:
 Put a number in front to jump several: 3. jumps three
 levels forward and 2, jumps two back (it stops at the
 first and last level). The program ends at the jump —
-any moves after it are not run. The shortcuts your
-program defines, before or after the jump, come with
-you to the new level. A jump that stays on the same
-level, such as , on the first one, starts it over and
-keeps none of them.
+any moves after it are not run, and no shortcut your
+program defines comes with you: only a win saves
+shortcuts. A jump that stays on the same level, such as
+, on the first one, starts it over.
 
 ## Leaving
 

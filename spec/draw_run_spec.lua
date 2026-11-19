@@ -226,14 +226,35 @@ T.it("Enter after a win runs again and can win again; Tab "
     T.eq(GS.level_index, 2)
   end)
 
-T.it("a jump carries the jumping program's shortcuts, as in maze",
+-- Only a win saves, as in maze: a jump opens the next picture
+-- with the shortcuts the picture it left started with.
+
+T.it("a jump carries none of the jumping program's shortcuts",
   function()
     startDrawMode("picture")
     run("x=e;.")
     T.eq(GS.level_index, 2)
     T.eq(widget.text, "")
     run("x")
+    T.eq(GS.invalid.msg, "Unknown command: X")
+    run(",;y=e")
+    T.eq(GS.level_index, 1)
+    run("y")
+    T.eq(GS.invalid.msg, "Unknown command: Y")
+  end)
+
+T.it("a jump keeps the shortcuts its picture started with",
+  function()
+    startDrawMode("picture")
+    run("x=5e;x")
+    T.eq(GS.won, true)
+    press({ }, "tab")
+    run("y=e;.")
+    T.eq(GS.level_index, 3)
+    run("x")
     T.eq(GS.invalid, nil)
+    run("y")
+    T.eq(GS.invalid.msg, "Unknown command: Y")
   end)
 
 T.it("every picture is one valid program on one field line",

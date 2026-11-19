@@ -37,7 +37,9 @@ recorded source identity and the previous project is backed up.
    level stay. Press Esc and confirm the field empties and the
    level stays; press Esc again and confirm the maze menu.
    Back on that level, type `<`, press Enter, and confirm it
-   is refused as invalid input.
+   is refused as invalid input. Replace the text with `y=e;.`
+   and run it; on Maze 5 run `y` and confirm "Unknown command:
+   Y": a jump carries no shortcut.
 8. At the maze menu, press Shift+Esc, Alt+Esc and
    Alt+Shift+Esc and confirm the menu stays; press Esc and
    confirm Maze leaves for the console.
@@ -90,7 +92,9 @@ recorded source identity and the previous project is backed up.
    point. Run a wrong program, then a corrected one, and confirm
    the corrected run starts clean.
 9. Run `.` and `,` to confirm next/previous navigation, then
-   use a counted jump and confirm first/last clamping.
+   use a counted jump and confirm first/last clamping. Run
+   `y=s;.`, then `y` on the next picture, and confirm "Unknown
+   command: Y": a jump carries no shortcut.
 10. Confirm Pictures 1-7 complete without retracing. Complete
    T with `4W2E5S` and confirm retracing is accepted.
 11. On a hint-off task, toggle the hint on, draw an extra edge,

@@ -147,7 +147,7 @@ end
 --
 -- A program is validated against the level's base, and a
 -- rejected one leaves the shortcuts of the run before it,
--- which a win or a jump still carries on.
+-- which a win still carries on.
 --
 -- A run from the field is judged when it ends, whatever the
 -- run before it left: a win, a miss or a crash drops

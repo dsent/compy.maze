@@ -265,13 +265,36 @@ T.it("Esc during a plan run stops it: robot home, plan kept, "
     T.eq(level_index, 1)
   end)
 
-T.it("a jump carries the jumping program's shortcuts", function()
-  on_field_level()
-  run("x=e;.")
-  T.eq(level_index, 5)
-  run("x")
-  T.eq(GS.invalid, nil)
-end)
+-- Only a win saves: a jump opens the next level with the
+-- shortcuts the level it left started with.
+
+T.it("a jump carries none of the jumping program's shortcuts",
+  function()
+    on_field_level()
+    run("x=e;.")
+    T.eq(level_index, 5)
+    run("x")
+    T.eq(GS.invalid.msg, "Unknown command: X")
+    on_field_level()
+    run(".;y=e")
+    T.eq(level_index, 5)
+    run("y")
+    T.eq(GS.invalid.msg, "Unknown command: Y")
+  end)
+
+T.it("a jump keeps the shortcuts its level started with",
+  function()
+    on_field_level()
+    run("x=2n;x2wx")
+    T.eq(level_index, 5)
+    run("y=e;.")
+    T.eq(level_index, 6)
+    run("x")
+    T.eq(GS.invalid, nil)
+    press({ }, "tab")
+    run("y")
+    T.eq(GS.invalid.msg, "Unknown command: Y")
+  end)
 
 T.it("a win carries the winning program's shortcuts, and Maze 5 "
   .. "is not judged on arrival", function()
