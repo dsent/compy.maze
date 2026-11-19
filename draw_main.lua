@@ -24,9 +24,6 @@ macros = { }
 cur_controls = nil
 cur_legend = DRAW_LEGEND
 
--- GS.win_macros holds the winning program's shortcuts while
--- the child stays on a won picture; nil until won.
-
 GS = {
   init = false,
   screen = "menu",
@@ -34,7 +31,6 @@ GS = {
   level_index = nil,
   hint = false,
   won = false,
-  was_matched = false,
   running = false,
   step_by_step = false,
   base_macros = { }
@@ -61,14 +57,6 @@ function blocked(tc, tr)
   return tc < 1 or GRID.cols < tc or tr < 1 or GRID.rows < tr
 end
 
-function tracesCurrentlyMatched()
-  local level = currentDrawLevel()
-  if not level then
-    return false
-  end
-  return tracesMatchTarget(player.traces, level)
-end
-
 -- In default mode a validated program runs from a clean start
 -- (drawing cleared, robot home). In step-by-step mode it runs
 -- on top of the canvas, clearing only any frozen stop anim.
@@ -77,11 +65,8 @@ function before_run()
   GS.won = false
   if GS.step_by_step then
     player.anim = nil
-    local won = GS.win_macros ~= nil
-    GS.was_matched = won and tracesCurrentlyMatched()
     return
   end
-  GS.was_matched = false
   local col, row, dir = activeStart()
   player_reset(col, row, dir)
 end
@@ -91,13 +76,13 @@ end
 
 function finish_run()
   GS.running = false
-  local matched = tracesCurrentlyMatched()
-  local celebrate = matched and not GS.was_matched
-  if not celebrate then
+  local level = currentDrawLevel()
+  local matched = level and
+      tracesMatchTarget(player.traces, level)
+  if not matched then
     return
   end
   GS.won = true
-  GS.win_macros = clone_macros(macros)
   ctrl_update = nil
   open_editor("")
   sfx.win()
@@ -131,17 +116,13 @@ end
 -- the target with the left picture's base. Step-by-step mode
 -- carries all accumulated shortcuts across every jump.
 
-function carryStepMacros()
-  if GS.step_by_step then
-    GS.base_macros = clone_macros(macros)
-  end
-end
-
 function jumpPictureLevel(delta)
   if GS.draw_mode ~= "picture" then
     return
   end
-  carryStepMacros()
+  if GS.step_by_step then
+    GS.base_macros = clone_macros(macros)
+  end
   local index = clampDrawLevelIndex(GS.level_index + delta)
   GS.level_index = index
   startPictureLevel()
@@ -208,8 +189,6 @@ function resetDrawProgramState()
   GS.program = nil
   GS.running = false
   GS.won = false
-  GS.was_matched = false
-  GS.win_macros = nil
   cur_controls = editor
   cur_legend = DRAW_LEGEND
   macros = clone_macros(GS.base_macros)
@@ -262,8 +241,6 @@ function toDrawMenu()
   GS.screen = "menu"
   GS.draw_mode = nil
   GS.won = false
-  GS.was_matched = false
-  GS.win_macros = nil
   player.queue = { }
   player.queue_refs = { }
   ctrl_update = nil
@@ -273,8 +250,7 @@ function toDrawMenu()
 end
 
 function nextPictureLevel()
-  GS.base_macros = clone_macros(GS.win_macros or macros)
-  carryStepMacros()
+  GS.base_macros = clone_macros(macros)
   GS.level_index = GS.level_index + 1
   if #DRAW_LEVELS < GS.level_index then
     toDrawMenu()
@@ -327,12 +303,10 @@ TAB_COMBOS = {
 }
 
 function tabProgression()
-  local busy = GS.screen ~= "game" or GS.running
-  if busy then
+  if GS.screen ~= "game" then
     return
   end
-  local can = GS.won or GS.win_macros
-  if can then
+  if GS.won then
     nextPictureLevel()
   end
 end

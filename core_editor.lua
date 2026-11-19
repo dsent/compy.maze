@@ -146,13 +146,13 @@ end
 -- the child edits.
 --
 -- A program is validated against the level's base, and a
--- win saves its shortcuts for Tab to carry on, even after a
--- rejected or non-winning run.
+-- rejected one leaves the shortcuts of the run before it,
+-- which a win still carries on.
 --
 -- A run from the field is judged when it ends, whatever the
 -- run before it left: a win, a miss or a crash drops
 -- ctrl_update to hold the screen, and Enter in place of Tab
--- clears the banner so the child can stay and play.
+-- arms it again.
 --
 -- The field goes while the robot moves: no typing, Enter or
 -- recall reaches it, and the keys go to the program, which
